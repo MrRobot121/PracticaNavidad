@@ -34,13 +34,12 @@ public class LabelBonito extends JLabel {
     public LabelBonito(String texto) {
         super(texto);
 
-        // Misma gama de colores que el botón
-        setForeground(new Color(52, 152, 219));      // texto azul
-        // Si quieres fondo también:
-        // setOpaque(true);
-        // setBackground(Color.WHITE);
-
-        // Fuente 14 pt
-        setFont(new Font("SansSerif", Font.BOLD, 14));
+        // Texto gris claro para fondos oscuros
+        setForeground(new Color(220, 220, 230));
+        // Centrar texto
+        setHorizontalAlignment(SwingConstants.CENTER);
+        setVerticalAlignment(SwingConstants.CENTER);
+        // Fuente ligera y legible
+        setFont(new Font("Segoe UI", Font.PLAIN, 14));
     }
 }

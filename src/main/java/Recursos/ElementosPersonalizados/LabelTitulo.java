@@ -34,16 +34,20 @@ public class LabelTitulo extends JLabel {
     public LabelTitulo(String texto) {
         super(texto);
 
-        setForeground(new Color(52, 152, 219));
-        setFont(new Font("SansSerif", Font.BOLD, 22));
+        // Acento morado a juego con el botón
+        setForeground(new Color(88, 86, 214));
 
-        // Centrar texto dentro del label
+        // Título grande y claro
+        setFont(new Font("Segoe UI", Font.BOLD, 24));
+
+        // Centrar texto
         setHorizontalAlignment(SwingConstants.CENTER);
-        setVerticalAlignment(SwingConstants.CENTER); // opcional
+        setVerticalAlignment(SwingConstants.CENTER);
 
-        // Si quieres que ocupe bien el espacio:
-        // setOpaque(true);
-        // setBackground(Color.WHITE);
+        // destaque sobre fondo oscuro
+        setOpaque(true);
+         setBackground(new Color(30, 30, 35));
     }
 }
+
 
