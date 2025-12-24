@@ -15,6 +15,7 @@ import java.awt.Color;
 public class InicioSesion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InicioSesion.class.getName());
+
     /**
      * Creates new form InicioSesion
      */
@@ -24,8 +25,8 @@ public class InicioSesion extends javax.swing.JFrame {
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
 
-      ResurceBundle.setLocale(ResurceBundle.spanish);
-      actualizarElementosIdioma();
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
     }
 
     /**
@@ -44,6 +45,7 @@ public class InicioSesion extends javax.swing.JFrame {
         password = new LabelBonito("");
         Enviar = new BotonBonito("");
         recuperarContrasenaBotton = new BotonBonito("");
+        nuevoUsuario = new BotonBonito("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,25 +68,28 @@ public class InicioSesion extends javax.swing.JFrame {
 
         recuperarContrasenaBotton.setText("jButton1");
 
+        nuevoUsuario.setText("jButton1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(207, 207, 207)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(UserLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Titulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(88, 88, 88)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(recuperarContrasenaBotton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Enviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(recuperarContrasenaBotton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(186, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(UserLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(nuevoUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,9 +106,11 @@ public class InicioSesion extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(38, 38, 38)
                 .addComponent(Enviar)
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
                 .addComponent(recuperarContrasenaBotton)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(nuevoUsuario)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
@@ -144,6 +151,7 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel UserLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton nuevoUsuario;
     private javax.swing.JLabel password;
     private javax.swing.JTextPane passwordPane;
     private javax.swing.JButton recuperarContrasenaBotton;
@@ -154,5 +162,10 @@ public class InicioSesion extends javax.swing.JFrame {
         Titulo.setText(ResurceBundle.t("login.title"));
         UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
         userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
+        password.setText(ResurceBundle.t("label.password"));        
+        passwordPane.setToolTipText(ResurceBundle.t("tooltip.password"));
+        Enviar.setText(ResurceBundle.t("button.next"));
+        recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
+        nuevoUsuario.setText(ResurceBundle.t("button.newUser"));
     }
 }
