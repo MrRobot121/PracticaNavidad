@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
-
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
 /**
  *
  * @author HugoJB
@@ -17,6 +19,12 @@ public class ProductoFicha extends javax.swing.JFrame {
      */
     public ProductoFicha() {
         initComponents();
+                getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+// o en tu panel principal:
+//panelPrincipal.setBackground(new Color(30, 30, 35));
+
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
     }
 
     /**
@@ -26,21 +34,169 @@ public class ProductoFicha extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Enviar1 = new BotonBonito("");
+        NombreL = new LabelBonito("");
+        CantidadDato = new LabelBonito("");
+        Titulo = new LabelTitulo("");
+        NombreDato = new LabelBonito("");
+        CategoriaL = new LabelBonito("");
+        CategoriaDato = new LabelBonito("");
+        CantidadProductoL = new LabelBonito("");
+        CantidadMinimaL = new LabelBonito("");
+        CantidadMinimaDato = new LabelBonito("");
+        Añadir1 = new BotonBonito("");
+        Restar1 = new BotonBonito("");
+        AñadirListaCompra = new BotonBonito("");
+        EliminarProducto = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        Enviar1.setText("jButton1");
+        Enviar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Enviar1ActionPerformed(evt);
+            }
+        });
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        NombreL.setText("jLabel1");
+
+        CantidadDato.setText("jLabel1");
+
+        Titulo.setText("fedsqwwgfdssdggsdgsdfgg");
+
+        NombreDato.setText("jLabel1");
+
+        CategoriaL.setText("jLabel1");
+
+        CategoriaDato.setText("jLabel1");
+
+        CantidadProductoL.setText("jLabel1");
+
+        CantidadMinimaL.setText("jLabel1");
+
+        CantidadMinimaDato.setText("jLabel1");
+
+        Añadir1.setText("jButton1");
+        Añadir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir1ActionPerformed(evt);
+            }
+        });
+
+        Restar1.setText("jButton1");
+        Restar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Restar1ActionPerformed(evt);
+            }
+        });
+
+        AñadirListaCompra.setText("jButton1");
+        AñadirListaCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AñadirListaCompraActionPerformed(evt);
+            }
+        });
+
+        EliminarProducto.setText("jButton1");
+        EliminarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarProductoActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setText("Ir a");
+
+        jMenuItem2.setText("Menu");
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE)
+                .addGap(89, 89, 89))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CantidadMinimaL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NombreL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CategoriaL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CantidadProductoL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Añadir1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                    .addComponent(AñadirListaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CategoriaDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(NombreDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(CantidadDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(CantidadMinimaDato, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Restar1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(EliminarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NombreL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NombreDato, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CategoriaL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CategoriaDato, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CantidadProductoL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CantidadDato, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CantidadMinimaL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CantidadMinimaDato, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Añadir1)
+                    .addComponent(Restar1))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AñadirListaCompra)
+                    .addComponent(EliminarProducto))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Añadir1ActionPerformed
+
+    private void Enviar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Enviar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Enviar1ActionPerformed
+
+    private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Restar1ActionPerformed
+
+    private void AñadirListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirListaCompraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AñadirListaCompraActionPerformed
+
+    private void EliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EliminarProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,5 +224,46 @@ public class ProductoFicha extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Añadir1;
+    private javax.swing.JButton AñadirListaCompra;
+    private javax.swing.JLabel CantidadDato;
+    private javax.swing.JLabel CantidadMinimaDato;
+    private javax.swing.JLabel CantidadMinimaL;
+    private javax.swing.JLabel CantidadProductoL;
+    private javax.swing.JLabel CategoriaDato;
+    private javax.swing.JLabel CategoriaL;
+    private javax.swing.JButton EliminarProducto;
+    private javax.swing.JButton Enviar1;
+    private javax.swing.JLabel NombreDato;
+    private javax.swing.JLabel NombreL;
+    private javax.swing.JButton Restar1;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     // End of variables declaration//GEN-END:variables
+  private void actualizarElementosIdioma() {
+
+    // Título
+    Titulo.setText(ResurceBundle.t("label.product"));
+
+    NombreL.setText(ResurceBundle.t("table.product.name"));
+    CantidadProductoL.setText(ResurceBundle.t("table.product.quantity"));
+    CantidadMinimaL.setText(ResurceBundle.t("table.product.minQuantity"));
+    CategoriaL.setText(ResurceBundle.t("table.product.category"));
+
+    // Botones
+    Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+    AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
+    EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
+Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
+    Enviar1.setText(ResurceBundle.t("button.saveProduct"));  
+    
+    // Menú
+    jMenu1.setText(ResurceBundle.t("menu.navigation"));     
+    jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+   /* editar.setText(ResurceBundle.t("menu.edit"));
+    jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
+    Restablecer.setText(ResurceBundle.t("button.resetForm"));*/
+}
 }

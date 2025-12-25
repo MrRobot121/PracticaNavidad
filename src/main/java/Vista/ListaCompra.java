@@ -4,19 +4,30 @@
  */
 package Vista;
 
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
+import javax.swing.BorderFactory;
+
 /**
  *
  * @author HugoJB
  */
 public class ListaCompra extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaCompra.class.getName());
 
     /**
      * Creates new form ListaCompra
      */
     public ListaCompra() {
+        ResurceBundle.setLocale(ResurceBundle.spanish);
         initComponents();
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+// o en tu panel principal:
+//panelPrincipal.setBackground(new Color(30, 30, 35));
+
+        actualizarElementosIdioma();
     }
 
     /**
@@ -26,21 +37,140 @@ public class ListaCompra extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Añadir1 = new BotonBonito("");
+        Restar1 = new BotonBonito("");
+        VerProducto = new BotonBonito("");
+        Titulo = new LabelTitulo("");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new TableBonito();
+        EliminarListaCompra = new BotonBonito("");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Añadir1.setText("jButton1");
+        Añadir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir1ActionPerformed(evt);
+            }
+        });
+
+        Restar1.setText("jButton1");
+        Restar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Restar1ActionPerformed(evt);
+            }
+        });
+
+        VerProducto.setText("jButton1");
+        VerProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerProductoActionPerformed(evt);
+            }
+        });
+
+        Titulo.setText("fedsqwwgfdssdggsdgsdfgg");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                ResurceBundle.t("table.product.name") , ResurceBundle.t("table.product.category"),  ResurceBundle.t("table.product.quantity"),  ResurceBundle.t("table.product.minQuantity")
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 55));
+        jScrollPane1.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 95)));
+
+        EliminarListaCompra.setText("jButton1");
+        EliminarListaCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarListaCompraActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(VerProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Añadir1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(Restar1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(EliminarListaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Añadir1)
+                    .addComponent(Restar1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(VerProducto)
+                    .addComponent(EliminarListaCompra))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Añadir1ActionPerformed
+
+    private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Restar1ActionPerformed
+
+    private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_VerProductoActionPerformed
+
+    private void EliminarListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarListaCompraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EliminarListaCompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,5 +198,34 @@ public class ListaCompra extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Añadir1;
+    private javax.swing.JButton EliminarListaCompra;
+    private javax.swing.JButton Restar1;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton VerProducto;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    private void actualizarElementosIdioma() {
+        /* Titulo.setText(ResurceBundle.t("login.title"));
+        UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
+        userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
+        password.setText(ResurceBundle.t("label.password"));        
+        passwordPane.setToolTipText(ResurceBundle.t("tooltip.password"));
+        Enviar.setText(ResurceBundle.t("button.next"));
+        recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
+        nuevoUsuario.setText(ResurceBundle.t("button.newUser"));*/
+        //   adir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+        //AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
+        //EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
+
+        Titulo.setText(ResurceBundle.t("label.shoppingListTitle"));//CAMBIAR PARA LIST COMPRA
+        Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+
+        Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
+        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));     
+                EliminarListaCompra.setText(ResurceBundle.t("button.deleteShoppingList"));     
+
+
+    }
 }
