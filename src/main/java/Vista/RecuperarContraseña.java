@@ -4,6 +4,9 @@
  */
 package Vista;
 
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
 /**
  *
  * @author HugoJB
@@ -17,6 +20,11 @@ public class RecuperarContraseña extends javax.swing.JFrame {
      */
     public RecuperarContraseña() {
         initComponents();
+                getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+                actualizarElementosIdioma();
+
+
     }
 
     /**
@@ -26,17 +34,70 @@ public class RecuperarContraseña extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new PanelBonito();
+        TItuloL = new LabelTitulo("");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        userPane = new TextPaneBonito();
+        VolverIncioSesion = new BotonBonito("");
+        EnviarCorreo1 = new BotonBonito("");
+        men = new LabelMensaje();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        TItuloL.setText("jLabel1");
+
+        jScrollPane1.setViewportView(userPane);
+
+        VolverIncioSesion.setText("jButton1");
+
+        EnviarCorreo1.setText("jButton1");
+
+        men.setText("jLabel1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(131, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(men, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(EnviarCorreo1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                        .addComponent(TItuloL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(VolverIncioSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)))
+                .addGap(85, 85, 85))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addComponent(TItuloL, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(men, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(EnviarCorreo1)
+                .addGap(60, 60, 60)
+                .addComponent(VolverIncioSesion)
+                .addContainerGap(96, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -68,5 +129,20 @@ public class RecuperarContraseña extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton EnviarCorreo1;
+    private javax.swing.JLabel TItuloL;
+    private javax.swing.JButton VolverIncioSesion;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel men;
+    private javax.swing.JTextPane userPane;
     // End of variables declaration//GEN-END:variables
+   private void actualizarElementosIdioma() {
+        TItuloL.setText(ResurceBundle.t("button.recoverPassword"));
+ men.setText(ResurceBundle.t("label.recoverInfo"));
+        userPane.setToolTipText(ResurceBundle.t("label.email"));
+        VolverIncioSesion.setText(ResurceBundle.t("button.backToLogin"));
+        EnviarCorreo1.setText(ResurceBundle.t("button.recoverPassword"));
+    }
+
 }
