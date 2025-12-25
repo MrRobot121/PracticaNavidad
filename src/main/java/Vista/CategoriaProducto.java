@@ -4,6 +4,10 @@
  */
 package Vista;
 
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
+import javax.swing.BorderFactory;
 /**
  *
  * @author HugoJB
@@ -16,7 +20,13 @@ public class CategoriaProducto extends javax.swing.JFrame {
      * Creates new form CategoriaProducto
      */
     public CategoriaProducto() {
-        initComponents();
+     ResurceBundle.setLocale(ResurceBundle.spanish);     initComponents();
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+// o en tu panel principal:
+//panelPrincipal.setBackground(new Color(30, 30, 35));
+
+      
+        actualizarElementosIdioma();
     }
 
     /**
@@ -26,21 +36,120 @@ public class CategoriaProducto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Titulo = new LabelTitulo("");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new TableBonito();
+        Añadir1 = new BotonBonito("");
+        Restar1 = new BotonBonito("");
+        VerProducto = new BotonBonito("");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Titulo.setText("fedsqwwgfdssdggsdgsdfgg");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                ResurceBundle.t("table.product.name") , ResurceBundle.t("table.product.category"),  ResurceBundle.t("table.product.quantity"),  ResurceBundle.t("table.product.minQuantity")
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.getViewport().setBackground(new Color(45, 45, 55));
+        jScrollPane1.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 95)));
+
+        Añadir1.setText("jButton1");
+        Añadir1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Añadir1ActionPerformed(evt);
+            }
+        });
+
+        Restar1.setText("jButton1");
+        Restar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Restar1ActionPerformed(evt);
+            }
+        });
+
+        VerProducto.setText("jButton1");
+        VerProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerProductoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Añadir1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                        .addGap(52, 52, 52)
+                        .addComponent(Restar1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(VerProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 492, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Añadir1)
+                    .addComponent(Restar1))
+                .addGap(18, 18, 18)
+                .addComponent(VerProducto)
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Añadir1ActionPerformed
+
+    private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Restar1ActionPerformed
+
+    private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_VerProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,5 +177,31 @@ public class CategoriaProducto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Añadir1;
+    private javax.swing.JButton Restar1;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JButton VerProducto;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    private void actualizarElementosIdioma() {
+       /* Titulo.setText(ResurceBundle.t("login.title"));
+        UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
+        userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
+        password.setText(ResurceBundle.t("label.password"));        
+        passwordPane.setToolTipText(ResurceBundle.t("tooltip.password"));
+        Enviar.setText(ResurceBundle.t("button.next"));
+        recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
+        nuevoUsuario.setText(ResurceBundle.t("button.newUser"));*/
+    //   adir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+    //AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
+    //EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
+        
+    Titulo.setText(ResurceBundle.t("label.category"));//CAMBIAR PARA LIST COMPRA
+    Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+        
+Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
+    VerProducto.setText(ResurceBundle.t("label.viewByProduct"));                  // Añadir
+
+    }
 }

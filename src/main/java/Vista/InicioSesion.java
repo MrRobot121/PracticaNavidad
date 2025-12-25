@@ -4,6 +4,10 @@
  */
 package Vista;
 
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
+
 /**
  *
  * @author HugoJB
@@ -17,6 +21,12 @@ public class InicioSesion extends javax.swing.JFrame {
      */
     public InicioSesion() {
         initComponents();
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+// o en tu panel principal:
+//panelPrincipal.setBackground(new Color(30, 30, 35));
+
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
     }
 
     /**
@@ -26,21 +36,89 @@ public class InicioSesion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Titulo = new LabelTitulo("");
+        UserLabel = new LabelBonito("");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        userPane = new TextPaneBonito();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        passwordPane = new TextPaneBonito();
+        password = new LabelBonito("");
+        Enviar = new BotonBonito("");
+        recuperarContrasenaBotton = new BotonBonito("");
+        nuevoUsuario = new BotonBonito("");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Titulo.setText("fedsqwwgfdssdggsdgsdfgg");
+
+        UserLabel.setText("jLabel1");
+
+        jScrollPane1.setViewportView(userPane);
+
+        jScrollPane2.setViewportView(passwordPane);
+
+        password.setText("jLabel1");
+
+        Enviar.setText("jButton1");
+        Enviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnviarActionPerformed(evt);
+            }
+        });
+
+        recuperarContrasenaBotton.setText("jButton1");
+
+        nuevoUsuario.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(88, 88, 88)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(recuperarContrasenaBotton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Enviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(UserLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(nuevoUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(87, 87, 87)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(UserLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addComponent(Enviar)
+                .addGap(18, 18, 18)
+                .addComponent(recuperarContrasenaBotton)
+                .addGap(18, 18, 18)
+                .addComponent(nuevoUsuario)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void EnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EnviarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,5 +146,26 @@ public class InicioSesion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Enviar;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JLabel UserLabel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton nuevoUsuario;
+    private javax.swing.JLabel password;
+    private javax.swing.JTextPane passwordPane;
+    private javax.swing.JButton recuperarContrasenaBotton;
+    private javax.swing.JTextPane userPane;
     // End of variables declaration//GEN-END:variables
+
+    private void actualizarElementosIdioma() {
+        Titulo.setText(ResurceBundle.t("login.title"));
+        UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
+        userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
+        password.setText(ResurceBundle.t("label.password"));        
+        passwordPane.setToolTipText(ResurceBundle.t("tooltip.password"));
+        Enviar.setText(ResurceBundle.t("button.next"));
+        recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
+        nuevoUsuario.setText(ResurceBundle.t("button.newUser"));
+    }
 }

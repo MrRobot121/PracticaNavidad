@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
-
+import Recursos.ElementosPersonalizados.*;
+import Recursos.*;
+import java.awt.Color;
 /**
  *
  * @author HugoJB
@@ -17,6 +19,12 @@ public class NuevoProducto extends javax.swing.JFrame {
      */
     public NuevoProducto() {
         initComponents();
+         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+// o en tu panel principal:
+//panelPrincipal.setBackground(new Color(30, 30, 35));
+
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
     }
 
     /**
@@ -26,21 +34,137 @@ public class NuevoProducto extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        nombreL = new LabelBonito("");
+        jScrollPane1 = new javax.swing.JScrollPane();
+        NombreEd = new TextPaneBonito();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        CantidadEdit = new TextPaneBonito();
+        CantidadLabel = new LabelBonito("");
+        Titulo = new LabelTitulo("");
+        CatageriaLabel = new LabelBonito("");
+        MininmoDesadoLabel = new LabelBonito("");
+        jScrollPane3 = new javax.swing.JScrollPane();
+        MininmoDesadoEdit = new TextPaneBonito();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        CatageriaEditText = new TextPaneBonito();
+        AddButon = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        editar = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Restablecer = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        nombreL.setText("jLabel1");
+
+        jScrollPane1.setViewportView(NombreEd);
+
+        jScrollPane2.setViewportView(CantidadEdit);
+
+        CantidadLabel.setText("jLabel1");
+
+        Titulo.setText("fedsqwwgfdssdggsdgsdfgg");
+
+        CatageriaLabel.setText("jLabel1");
+
+        MininmoDesadoLabel.setText("jLabel1");
+
+        jScrollPane3.setViewportView(MininmoDesadoEdit);
+
+        jScrollPane4.setViewportView(CatageriaEditText);
+
+        AddButon.setText("jButton1");
+
+        jMenu1.setText("Ir a");
+
+        jMenuItem2.setText("Menu");
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        editar.setText("Editar");
+
+        jMenuItem1.setText("Guardar");
+        editar.add(jMenuItem1);
+
+        Restablecer.setText("Restablecer");
+        Restablecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestablecerActionPerformed(evt);
+            }
+        });
+        editar.add(Restablecer);
+
+        jMenuBar1.add(editar);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(CatageriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(MininmoDesadoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(AddButon, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(CantidadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(nombreL, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(85, 85, 85))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nombreL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CantidadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(MininmoDesadoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CatageriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addComponent(AddButon)
+                .addGap(50, 50, 50))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_RestablecerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -68,5 +192,54 @@ public class NuevoProducto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AddButon;
+    private javax.swing.JTextPane CantidadEdit;
+    private javax.swing.JLabel CantidadLabel;
+    private javax.swing.JTextPane CatageriaEditText;
+    private javax.swing.JLabel CatageriaLabel;
+    private javax.swing.JTextPane MininmoDesadoEdit;
+    private javax.swing.JLabel MininmoDesadoLabel;
+    private javax.swing.JTextPane NombreEd;
+    private javax.swing.JMenuItem Restablecer;
+    private javax.swing.JLabel Titulo;
+    private javax.swing.JMenu editar;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel nombreL;
     // End of variables declaration//GEN-END:variables
+private void actualizarElementosIdioma() {
+
+    // Título
+    Titulo.setText(ResurceBundle.t("label.newProduct"));
+
+    // Labels
+    nombreL.setText(ResurceBundle.t("table.product.name"));
+    CantidadLabel.setText(ResurceBundle.t("label.quantity"));
+    MininmoDesadoLabel.setText(ResurceBundle.t("table.product.minQuantity"));
+    CatageriaLabel.setText(ResurceBundle.t("table.product.category"));
+
+    // Tooltips campos
+    NombreEd.setToolTipText(ResurceBundle.t("label.addProductName"));
+    CantidadEdit.setToolTipText(ResurceBundle.t("label.addProductQuantity"));
+    MininmoDesadoEdit.setToolTipText(ResurceBundle.t("label.addProductMinQuantity"));
+    CatageriaEditText.setToolTipText(ResurceBundle.t("label.addProductCategory"));
+
+    // Botón principal
+    AddButon.setText(ResurceBundle.t("button.saveProduct"));
+
+    // Menú
+    jMenu1.setText(ResurceBundle.t("menu.navigation"));     
+    jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+    editar.setText(ResurceBundle.t("menu.edit"));
+    jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
+    Restablecer.setText(ResurceBundle.t("button.resetForm"));
+}
+
+
 }

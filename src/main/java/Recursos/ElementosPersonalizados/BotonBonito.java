@@ -31,13 +31,11 @@ public class BotonBonito extends JButton {
 
     public BotonBonito(String texto) {
         super(texto);
+  // morado estilo iOS
+        setBackground(new Color(88, 86, 214));    
+        setForeground(Color.WHITE);                
 
-        // Colores
-        setBackground(new Color(52, 152, 219));   // azul bonito
-        setForeground(Color.WHITE);              // texto blanco
-
-        // Fuente “chula”
-        setFont(new Font("SansSerif", Font.BOLD, 16));
+        setFont(new Font("Segoe UI", Font.BOLD, 15));
 
         // Quitar cosas feas
         setFocusPainted(false);
@@ -45,7 +43,11 @@ public class BotonBonito extends JButton {
         setContentAreaFilled(true);
         setOpaque(true);
 
-        // Un poco de padding para que no quede enano
-        setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+        // Padding un poco más cómodo
+        setBorder(BorderFactory.createEmptyBorder(10, 24, 10, 24));
+
+        // Opcional: cursor de mano al pasar por encima
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 }
+
