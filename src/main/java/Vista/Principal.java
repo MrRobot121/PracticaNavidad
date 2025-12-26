@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  * @author HugoJB
  */
 public class Principal extends javax.swing.JFrame {
-    
+
     private final Usuarios user;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
 
@@ -36,7 +36,7 @@ public class Principal extends javax.swing.JFrame {
             this.dispose();
             InicioSesion inicioSesion = new InicioSesion();
             inicioSesion.setVisible(true);//VA INICIO SESION
-          //  System.exit(0);
+            //  System.exit(0);
             return;
         }
         ResurceBundle.setLocale(ResurceBundle.spanish);
@@ -75,6 +75,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         NuevoProductoBotton.setText("jButton1");
+        NuevoProductoBotton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NuevoProductoBottonActionPerformed(evt);
+            }
+        });
 
         CaducidadProsima.setText("jLabel1");
 
@@ -185,35 +190,48 @@ public class Principal extends javax.swing.JFrame {
 
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
         // TODO add your handling code here:
-         String texto = JOptionPane.showInputDialog(
-            this,
-            ResurceBundle.t("search.prompt"),   // "Introduce nombre de producto (vacío = todos)"
-            ResurceBundle.t("button.search"),   // título
-            JOptionPane.QUESTION_MESSAGE
-    );
+        String texto = JOptionPane.showInputDialog(
+                this,
+                ResurceBundle.t("search.prompt"), // "Introduce nombre de producto (vacío = todos)"
+                ResurceBundle.t("button.search"), // título
+                JOptionPane.QUESTION_MESSAGE
+        );
 
-    // Si pulsa Cancelar o cierra el diálogo, no haces nada
-    if (texto == null) {
-        return;
-    }
+        // Si pulsa Cancelar o cierra el diálogo, no haces nada
+        if (texto == null) {
+            return;
+        }
 
-    texto = texto.trim();
+        texto = texto.trim();
 
-    if (texto.isEmpty()) {
-        // Buscar TODOS los productos del usuario actual
-       
-     
-             List<Producto>    productos =  DaoProducto.buscarPorUsuario(1);
+        if (texto.isEmpty()) {
+            // Buscar TODOS los productos del usuario actual
 
-        irSegunda(productos);
-    } else {
-        // Buscar productos cuyo nombre empiece por 'texto' para ese usuario
-        List<Producto> productos = Dao.Daos.DaoProducto.buscarPorNombreYUsuario(texto, user.getId());
-      //  actualizarTabla(productos);
-              irSegunda(productos);
+            List<Producto> productos = DaoProducto.buscarPorUsuario(1);
 
-    }
+            irSegunda(productos, false);
+        } else {
+            // Buscar productos cuyo nombre empiece por 'texto' para ese usuario
+            List<Producto> productos = Dao.Daos.DaoProducto.buscarPorNombreYUsuario(texto, user.getId());
+            //  actualizarTabla(productos);
+            irSegunda(productos, false);
+
+        }
     }//GEN-LAST:event_BuscarActionPerformed
+    /**
+     * Va a nuevo producto y lo crea
+     *
+     * @param evt
+     */
+    private void NuevoProductoBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoProductoBottonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        NuevoProducto nv = new NuevoProducto(user);
+            nv.setVisible(true);
+    nv.setLocationRelativeTo(null);  // Centra en pantalla
+
+
+    }//GEN-LAST:event_NuevoProductoBottonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,14 +276,19 @@ public class Principal extends javax.swing.JFrame {
         VerListaCompra.setText(ResurceBundle.t("label.shoppingList"));
         VerProductoSelecionado1.setText(ResurceBundle.t("button.viewSelectedProduct"));
         VerProductosPorCategoria.setText(ResurceBundle.t("label.viewByCategory"));
-        
+
     }
 
-    private void irSegunda(List<Producto> productos) {
-        if(productos==null){CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR);return;}
-        CategoriaProducto cat=new CategoriaProducto(user,productos,false);//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
-            
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void irSegunda(List<Producto> productos, boolean categoria) {
+        if (productos == null) {
+            CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR);
+            return;
+        }
+            this.dispose();  // CIERRA ACTUAL
+
+        CategoriaProducto cat = new CategoriaProducto(user, productos, categoria);//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
+    cat.setVisible(true);
+    cat.setLocationRelativeTo(null);  // Centra en pantalla
     }
-    
+
 }
