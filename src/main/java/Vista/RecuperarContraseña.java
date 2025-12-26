@@ -4,9 +4,11 @@
  */
 package Vista;
 
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.util.UUID;
 /**
  *
  * @author HugoJB
@@ -50,8 +52,18 @@ public class RecuperarContraseña extends javax.swing.JFrame {
         jScrollPane1.setViewportView(userPane);
 
         VolverIncioSesion.setText("jButton1");
+        VolverIncioSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VolverIncioSesionActionPerformed(evt);
+            }
+        });
 
         EnviarCorreo1.setText("jButton1");
+        EnviarCorreo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EnviarCorreo1ActionPerformed(evt);
+            }
+        });
 
         men.setText("jLabel1");
 
@@ -63,11 +75,10 @@ public class RecuperarContraseña extends javax.swing.JFrame {
                 .addContainerGap(131, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(men, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(EnviarCorreo1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
-                        .addComponent(TItuloL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(VolverIncioSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1)))
+                    .addComponent(EnviarCorreo1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+                    .addComponent(TItuloL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(VolverIncioSesion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(85, 85, 85))
         );
         jPanel1Layout.setVerticalGroup(
@@ -102,6 +113,41 @@ public class RecuperarContraseña extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void EnviarCorreo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarCorreo1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("ALGO");
+         String email = userPane.getText().trim();
+    
+    if (email.isEmpty()) {
+        men.setText(ResurceBundle.t("error.required"));
+        return;
+    }
+    
+    // Buscar usuario por email
+    Usuarios usuario = Dao.Daos.DaoUser.buscarPorEmail(email);
+    
+    if (usuario == null) {
+        men.setText(ResurceBundle.t("recover.error"));
+    } else {
+        // SIMULAR envío (genera token)
+        String token = UUID.randomUUID().toString();
+        // TODO: Guardar token en BD con fecha expiración
+        
+        men.setText(ResurceBundle.t("recover.success"));
+        
+        // En producción: JavaMailSender envía email con link
+        // http://localhost:8080/recuperar?token=abc123
+    }
+    }//GEN-LAST:event_EnviarCorreo1ActionPerformed
+
+    private void VolverIncioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VolverIncioSesionActionPerformed
+  this.dispose();  // Cierra RecuperarContraseña
+    
+    InicioSesion loginFrame = new InicioSesion();
+    loginFrame.setVisible(true);
+    loginFrame.setLocationRelativeTo(null);  // Centra en pantalla        
+    }//GEN-LAST:event_VolverIncioSesionActionPerformed
 
     /**
      * @param args the command line arguments
