@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
@@ -20,7 +21,7 @@ public class ListaCompra extends javax.swing.JFrame {
     /**
      * Creates new form ListaCompra
      */
-    public ListaCompra() {
+    public ListaCompra(Usuarios user) {
         ResurceBundle.setLocale(ResurceBundle.spanish);
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
@@ -171,17 +172,17 @@ public class ListaCompra extends javax.swing.JFrame {
     private void EliminarListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarListaCompraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EliminarListaCompraActionPerformed
-
+/*
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+ /*   public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+   /*     try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -194,9 +195,9 @@ public class ListaCompra extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ListaCompra().setVisible(true));
+   /*     java.awt.EventQueue.invokeLater(() -> new ListaCompra(user).setVisible(true));
     }
-
+*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Añadir1;
     private javax.swing.JButton EliminarListaCompra;

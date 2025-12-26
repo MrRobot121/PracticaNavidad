@@ -3,23 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
+
+import Dao.Modelo.Producto;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+
 /**
  *
  * @author HugoJB
  */
 public class ProductoFicha extends javax.swing.JFrame {
-    
+
+    private com.github.lgooddatepicker.components.DatePicker FechaPicker;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductoFicha.class.getName());
 
     /**
      * Creates new form ProductoFicha
      */
-    public ProductoFicha() {
+    public ProductoFicha(Producto seleccionado) {
+        FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
         initComponents();
-                getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
 
@@ -48,6 +54,8 @@ public class ProductoFicha extends javax.swing.JFrame {
         Restar1 = new BotonBonito("");
         AñadirListaCompra = new BotonBonito("");
         EliminarProducto = new BotonBonito("");
+        CantidadMinimaL1 = new LabelBonito("");
+        jScrollPane6 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -107,6 +115,8 @@ public class ProductoFicha extends javax.swing.JFrame {
             }
         });
 
+        CantidadMinimaL1.setText("jLabel1");
+
         jMenu1.setText("Ir a");
 
         jMenuItem2.setText("Menu");
@@ -132,15 +142,17 @@ public class ProductoFicha extends javax.swing.JFrame {
                     .addComponent(CategoriaL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CantidadProductoL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Añadir1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(AñadirListaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                    .addComponent(AñadirListaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                    .addComponent(CantidadMinimaL1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CategoriaDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addComponent(NombreDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addComponent(CantidadDato, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(CategoriaDato, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(NombreDato, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(CantidadDato, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                     .addComponent(CantidadMinimaDato, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Restar1, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addComponent(EliminarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+                    .addComponent(EliminarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6)
+                    .addComponent(Restar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -164,16 +176,22 @@ public class ProductoFicha extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CantidadMinimaL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CantidadMinimaDato, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CantidadMinimaL1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Añadir1)
                     .addComponent(Restar1))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AñadirListaCompra)
                     .addComponent(EliminarProducto))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
+
+        jScrollPane6.setViewportView( FechaPicker);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -220,7 +238,7 @@ public class ProductoFicha extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ProductoFicha().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ProductoFicha(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -229,6 +247,7 @@ public class ProductoFicha extends javax.swing.JFrame {
     private javax.swing.JLabel CantidadDato;
     private javax.swing.JLabel CantidadMinimaDato;
     private javax.swing.JLabel CantidadMinimaL;
+    private javax.swing.JLabel CantidadMinimaL1;
     private javax.swing.JLabel CantidadProductoL;
     private javax.swing.JLabel CategoriaDato;
     private javax.swing.JLabel CategoriaL;
@@ -241,29 +260,30 @@ public class ProductoFicha extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane6;
     // End of variables declaration//GEN-END:variables
   private void actualizarElementosIdioma() {
 
-    // Título
-    Titulo.setText(ResurceBundle.t("label.product"));
+        // Título
+        Titulo.setText(ResurceBundle.t("label.product"));
 
-    NombreL.setText(ResurceBundle.t("table.product.name"));
-    CantidadProductoL.setText(ResurceBundle.t("table.product.quantity"));
-    CantidadMinimaL.setText(ResurceBundle.t("table.product.minQuantity"));
-    CategoriaL.setText(ResurceBundle.t("table.product.category"));
+        NombreL.setText(ResurceBundle.t("table.product.name"));
+        CantidadProductoL.setText(ResurceBundle.t("table.product.quantity"));
+        CantidadMinimaL.setText(ResurceBundle.t("table.product.minQuantity"));
+        CategoriaL.setText(ResurceBundle.t("table.product.category"));
 
-    // Botones
-    Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
-    AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
-    EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
-Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
-    Enviar1.setText(ResurceBundle.t("button.saveProduct"));  
-    
-    // Menú
-    jMenu1.setText(ResurceBundle.t("menu.navigation"));     
-    jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
-   /* editar.setText(ResurceBundle.t("menu.edit"));
+        // Botones
+        Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+        AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
+        EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
+        Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
+        Enviar1.setText(ResurceBundle.t("button.saveProduct"));
+
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+        /* editar.setText(ResurceBundle.t("menu.edit"));
     jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
     Restablecer.setText(ResurceBundle.t("button.resetForm"));*/
-}
+    }
 }

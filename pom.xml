@@ -13,7 +13,7 @@
         <maven.compiler.target>23</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-     <dependencyManagement>
+    <dependencyManagement>
 
         <dependencies>
 
@@ -39,7 +39,7 @@
 
     <dependencies>
         <!--CONTRASEÑAS-->
-                <dependency>
+        <dependency>
             <groupId>com.password4j</groupId>
             <artifactId>password4j</artifactId>
             <version>1.8.4</version>
@@ -50,7 +50,7 @@
             <version>0.9.8</version>
             <type>jar</type>
         </dependency>
-         <!-- Hibernate Core -->
+        <!-- Hibernate Core -->
 
         <dependency>
 
@@ -62,7 +62,7 @@
 
         <!-- Jakarta Transactions -->
 
-       <dependency>
+        <dependency>
 
             <groupId>jakarta.persistence</groupId>
 
@@ -88,6 +88,46 @@
 
             <version>9.5.0</version>
 
+        </dependency>
+        <dependency>
+            <groupId>com.github.lgooddatepicker</groupId>
+            <artifactId>LGoodDatePicker</artifactId>
+            <version>11.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.core</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.asm</artifactId>
+            <version>9.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.antlr</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.jpql</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <version>2.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>jakarta.persistence</artifactId>
+            <version>2.2.3</version>
         </dependency>
     </dependencies>
 </project>

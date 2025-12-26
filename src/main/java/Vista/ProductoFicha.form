@@ -67,15 +67,17 @@
                   <Component id="CantidadProductoL" alignment="1" max="32767" attributes="0"/>
                   <Component id="Añadir1" alignment="0" pref="216" max="32767" attributes="0"/>
                   <Component id="AñadirListaCompra" alignment="0" pref="216" max="32767" attributes="0"/>
+                  <Component id="CantidadMinimaL1" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="CategoriaDato" pref="275" max="32767" attributes="0"/>
-                  <Component id="NombreDato" pref="275" max="32767" attributes="0"/>
-                  <Component id="CantidadDato" pref="275" max="32767" attributes="0"/>
+                  <Component id="CategoriaDato" pref="302" max="32767" attributes="0"/>
+                  <Component id="NombreDato" pref="302" max="32767" attributes="0"/>
+                  <Component id="CantidadDato" pref="302" max="32767" attributes="0"/>
                   <Component id="CantidadMinimaDato" alignment="1" max="32767" attributes="0"/>
-                  <Component id="Restar1" alignment="0" pref="275" max="32767" attributes="0"/>
-                  <Component id="EliminarProducto" alignment="0" pref="275" max="32767" attributes="0"/>
+                  <Component id="EliminarProducto" alignment="0" pref="302" max="32767" attributes="0"/>
+                  <Component id="jScrollPane6" alignment="0" max="32767" attributes="0"/>
+                  <Component id="Restar1" alignment="1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -106,17 +108,22 @@
                   <Component id="CantidadMinimaL" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                   <Component id="CantidadMinimaDato" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="CantidadMinimaL1" min="-2" pref="24" max="-2" attributes="0"/>
+                  <Component id="jScrollPane6" min="-2" pref="38" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Añadir1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Restar1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="AñadirListaCompra" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="EliminarProducto" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="118" max="32767" attributes="0"/>
+              <EmptySpace pref="121" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -238,5 +245,20 @@
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new BotonBonito(&quot;&quot;)"/>
       </AuxValues>
     </Component>
+    <Component class="javax.swing.JLabel" name="CantidadMinimaL1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new LabelBonito(&quot;&quot;)"/>
+      </AuxValues>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane6">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="jScrollPane6.setViewportView( FechaPicker);"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
   </SubComponents>
 </Form>

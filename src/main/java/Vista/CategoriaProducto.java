@@ -4,45 +4,56 @@
  */
 package Vista;
 
+import Dao.Daos.DaoProducto;
 import Dao.Modelo.Producto;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
+import static Recursos.Fechas.formatearFecha;
 import java.awt.Color;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-/**FALTA IMPLEMNTAR
+
+/**
+ * FALTA IMPLEMNTAR
+ *
  * @author HugoJB
  */
 public class CategoriaProducto extends javax.swing.JFrame {
-    
+    // private com.github.lgooddatepicker.components.DatePicker FechaPicker;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CategoriaProducto.class.getName());
     private final Usuarios user;
     List<Producto> productos;
     Boolean cat;
+
     /**
      * Creates new form CategoriaProducto
      */
-    public CategoriaProducto(Usuarios user, List<Producto> productosm,Boolean categoria) {
-     ResurceBundle.setLocale(ResurceBundle.spanish);     initComponents();
+    public CategoriaProducto(Usuarios user, List<Producto> productosm, Boolean categoria) {
+        //  FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
-            this.user = user;
+        this.user = user;
 
-     if (user == null) {
+        if (user == null) {
             CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
             //System.exit(1); //ME CARGO EL PROGAMA 
             //MEJOR ME VOY AL LOGIN
             this.dispose();
             InicioSesion inicioSesion = new InicioSesion();
             inicioSesion.setVisible(true);//VA INICIO SESION
-          //  System.exit(0);
+            //  System.exit(0);
             return;
-        }this.productos=productos;
-      this.cat=categoria;
+        }
+        this.productos = productos;
+        this.cat = categoria;
         actualizarElementosIdioma();
+        actualizarList();
     }
 
     /**
@@ -77,14 +88,14 @@ public class CategoriaProducto extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                ResurceBundle.t("table.product.name") , ResurceBundle.t("table.product.category"),  ResurceBundle.t("table.product.quantity"),  ResurceBundle.t("table.product.minQuantity")
+                ResurceBundle.t("table.product.name") , ResurceBundle.t("table.product.category"),  ResurceBundle.t("table.product.quantity"),  ResurceBundle.t("table.product.minQuantity"),ResurceBundle.t("label.dateExpiraton")
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class,java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false,false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -157,15 +168,52 @@ public class CategoriaProducto extends javax.swing.JFrame {
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
+        modifiacarCantidad(cogerElementoActual(), 1);
     }//GEN-LAST:event_Añadir1ActionPerformed
 
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
         // TODO add your handling code here:
+        modifiacarCantidad(cogerElementoActual(), -1);
+
     }//GEN-LAST:event_Restar1ActionPerformed
 
     private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
         // TODO add your handling code here:
+        Producto p = cogerElementoActual();
+        if (p == null) {
+            return;
+
+        }
+        this.dispose();
+        ProductoFicha pr = new ProductoFicha(p);
+        pr.setVisible(true);
+        pr.setLocationRelativeTo(null);
     }//GEN-LAST:event_VerProductoActionPerformed
+    private Producto cogerElementoActual() {
+        if (productos == null || productos.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noProducts.title"), // "Error"
+                    ResurceBundle.t("dialog.noProducts.message"), // "No hay productos en la lista"
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noSelection.title"), // "Sin selección"
+                    ResurceBundle.t("dialog.noSelection.message"), // "Selecciona un producto de la tabla"
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return null;
+        }
+
+        int filaModelo = jTable1.convertRowIndexToModel(fila);
+        return productos.get(filaModelo);
+    }
 
     /**
      * @param args the command line arguments
@@ -189,7 +237,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null,false).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null, false).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -201,7 +249,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
     private void actualizarElementosIdioma() {
-       /* Titulo.setText(ResurceBundle.t("login.title"));
+        /* Titulo.setText(ResurceBundle.t("login.title"));
         UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
         userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
         password.setText(ResurceBundle.t("label.password"));        
@@ -209,20 +257,81 @@ public class CategoriaProducto extends javax.swing.JFrame {
         Enviar.setText(ResurceBundle.t("button.next"));
         recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
         nuevoUsuario.setText(ResurceBundle.t("button.newUser"));*/
-    //   adir1.setText(ResurceBundle.t("button.add"));                  // Añadir
-    //AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
-    //EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
+        //   adir1.setText(ResurceBundle.t("button.add"));                  // Añadir
+        //AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
+        //EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
         if (cat) {
-              Titulo.setText(ResurceBundle.t("label.category"));
-  
-        }else{
-                          Titulo.setText(ResurceBundle.t("label.results"));//CUANDO VIENE DE RESULTADOS
+            Titulo.setText(ResurceBundle.t("label.category"));
+
+        } else {
+            Titulo.setText(ResurceBundle.t("label.results"));//CUANDO VIENE DE RESULTADOS
 
         }
-    Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
-        
-Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
-    VerProducto.setText(ResurceBundle.t("label.viewByProduct"));                  // Añadir
+        Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
 
+        Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
+        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));                  // Añadir
+
+    }
+
+    private void actualizarList() {
+        if (productos == null || productos.isEmpty()) {
+            CuadroDiologo.mostrarAviso(this, "Error", "No hay elementos que mostrar vuelve a la pantalla princiapal", JOptionPane.ERROR);
+            return;
+        }
+        if (productos == null || productos.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noResults.title"), // o texto directo
+                    ResurceBundle.t("dialog.noResults.message"), // "No hay elementos que mostrar..."
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        // Obtener el modelo de la tabla
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+
+        // Limpiar la tabla
+        modelo.setRowCount(0);
+
+        // Rellenar filas desde la lista productos
+        for (Producto p : productos) {
+
+            modelo.addRow(new Object[]{
+                p.getNombre(),
+                p.getIdCategoria().getNombre(), // categoría
+                p.getCantidad(),
+                p.getCantidadMinDeseada(),
+                Fechas.formatearFecha(p.getFechaCaducidad())
+            });
+        }
+    }
+
+    /**
+     * ACtualiza la cantidad del producto
+     *
+     * @param p
+     * @param i LE SUMA A LA CANTIDAD SI ES NEGATIVO LOGIMENTE LE RESTA
+     */
+    private void modifiacarCantidad(Producto p, int i) {
+        if (p == null) {
+            return;
+        }
+
+        int nuevaCantidad = p.getCantidad() + i;
+        if (nuevaCantidad < 0) {
+            nuevaCantidad = 0;
+        }
+
+        p.setCantidad(nuevaCantidad);
+
+        // Guardar en BD
+        DaoProducto dao = new DaoProducto();
+        dao.update(p);
+
+        // Actualizar tabla
+        actualizarList();
     }
 }
