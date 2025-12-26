@@ -3,28 +3,48 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
+
+import Dao.Daos.*;
+import Dao.Modelo.Producto;
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.util.List;
+
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author HugoJB
  */
 public class Principal extends javax.swing.JFrame {
     
+    private final Usuarios user;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
 
     /**
      * Creates new form Principal
      */
-    public Principal() {
-     ResurceBundle.setLocale(ResurceBundle.spanish);    initComponents();
-              getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+    public Principal(Usuarios usuario) {
+        this.user = usuario;
+        if (user == null) {
+            CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
+            //System.exit(1); //ME CARGO EL PROGAMA 
+            //MEJOR ME VOY AL LOGIN
+            this.dispose();
+            InicioSesion inicioSesion = new InicioSesion();
+            inicioSesion.setVisible(true);//VA INICIO SESION
+          //  System.exit(0);
+            return;
+        }
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        initComponents();
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
-
-       
         actualizarElementosIdioma();
     }
 
@@ -48,6 +68,11 @@ public class Principal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Buscar.setText("jButton1");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
 
         NuevoProductoBotton.setText("jButton1");
 
@@ -158,6 +183,38 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        // TODO add your handling code here:
+         String texto = JOptionPane.showInputDialog(
+            this,
+            ResurceBundle.t("search.prompt"),   // "Introduce nombre de producto (vacío = todos)"
+            ResurceBundle.t("button.search"),   // título
+            JOptionPane.QUESTION_MESSAGE
+    );
+
+    // Si pulsa Cancelar o cierra el diálogo, no haces nada
+    if (texto == null) {
+        return;
+    }
+
+    texto = texto.trim();
+
+    if (texto.isEmpty()) {
+        // Buscar TODOS los productos del usuario actual
+       
+     
+             List<Producto>    productos =  DaoProducto.buscarPorUsuario(1);
+
+        irSegunda(productos);
+    } else {
+        // Buscar productos cuyo nombre empiece por 'texto' para ese usuario
+        List<Producto> productos = Dao.Daos.DaoProducto.buscarPorNombreYUsuario(texto, user.getId());
+      //  actualizarTabla(productos);
+              irSegunda(productos);
+
+    }
+    }//GEN-LAST:event_BuscarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -180,7 +237,7 @@ public class Principal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Principal().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Principal(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -198,10 +255,14 @@ public class Principal extends javax.swing.JFrame {
         Buscar.setText(ResurceBundle.t("button.search"));
         CaducidadProsima.setText(ResurceBundle.t("label.expiringSoon"));
         NuevoProductoBotton.setText(ResurceBundle.t("button.newProduct"));
-        VerListaCompra.setText(ResurceBundle.t("label.shoppingList"));        
+        VerListaCompra.setText(ResurceBundle.t("label.shoppingList"));
         VerProductoSelecionado1.setText(ResurceBundle.t("button.viewSelectedProduct"));
         VerProductosPorCategoria.setText(ResurceBundle.t("label.viewByCategory"));
-  
+        
     }
 
+    private void irSegunda(List<Producto> productos) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
 }

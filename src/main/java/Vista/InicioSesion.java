@@ -4,9 +4,12 @@
  */
 package Vista;
 
+import Dao.Daos.DaoUser;
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -67,8 +70,18 @@ public class InicioSesion extends javax.swing.JFrame {
         });
 
         recuperarContrasenaBotton.setText("jButton1");
+        recuperarContrasenaBotton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recuperarContrasenaBottonActionPerformed(evt);
+            }
+        });
 
         nuevoUsuario.setText("jButton1");
+        nuevoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevoUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,7 +131,71 @@ public class InicioSesion extends javax.swing.JFrame {
 
     private void EnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarActionPerformed
         // TODO add your handling code here:
+        String nombreString = userPane.getText().trim();
+    String contrasenia = passwordPane.getText().trim();
+
+    if (nombreString.isEmpty()) {
+        CuadroDiologo.mostrarAviso(
+            this,
+            ResurceBundle.t("login.title"),
+            ResurceBundle.t("error.login.userRequired"),
+            JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    if (contrasenia.isEmpty()) {
+        CuadroDiologo.mostrarAviso(
+            this,
+            ResurceBundle.t("login.title"),
+            ResurceBundle.t("error.login.passwordRequired"),
+            JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+    //YA TENGO TODO
+    
+    Usuarios usuario = DaoUser.buscarPorCredenciales(nombreString, contrasenia);
+
+    if (usuario == null) {
+        CuadroDiologo.mostrarAviso(
+            this, 
+            ResurceBundle.t("login.title"), 
+            ResurceBundle.t("error.login.credentials"), 
+            JOptionPane.ERROR_MESSAGE
+        );
+    } else {
+        CuadroDiologo.mostrarAviso(
+            this, 
+            ResurceBundle.t("login.welcome.title"), 
+            ResurceBundle.t("login.welcome.message")+" "+ usuario.getNombre(), 
+            JOptionPane.INFORMATION_MESSAGE
+        );
+        this.dispose();
+        // MENU PRINCIPAL CON USER NOT NULL
+        Principal principal=new Principal(usuario);
+        principal.setVisible(true);
+    }
+
+        
     }//GEN-LAST:event_EnviarActionPerformed
+
+    private void recuperarContrasenaBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarContrasenaBottonActionPerformed
+        // TODO add your handling code here:
+    this.dispose();  // CIERRA ACTUAL
+    
+    RecuperarContraseña recuperarFrame = new RecuperarContraseña();
+    recuperarFrame.setVisible(true);
+    recuperarFrame.setLocationRelativeTo(null);  // Centra en pantalla
+
+    }//GEN-LAST:event_recuperarContrasenaBottonActionPerformed
+
+    private void nuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoUsuarioActionPerformed
+        // TODO add your handling code here:
+             RegistroDialog dialog = new RegistroDialog(this, true);
+    dialog.setVisible(true);
+
+    }//GEN-LAST:event_nuevoUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
