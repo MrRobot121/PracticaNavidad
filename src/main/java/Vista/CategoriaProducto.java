@@ -12,8 +12,7 @@ import java.awt.Color;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
-/**
- *
+/**FALTA IMPLEMNTAR
  * @author HugoJB
  */
 public class CategoriaProducto extends javax.swing.JFrame {
@@ -21,6 +20,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CategoriaProducto.class.getName());
     private final Usuarios user;
     List<Producto> productos;
+    Boolean cat;
     /**
      * Creates new form CategoriaProducto
      */
@@ -41,7 +41,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
           //  System.exit(0);
             return;
         }this.productos=productos;
-      
+      this.cat=categoria;
         actualizarElementosIdioma();
     }
 
@@ -189,7 +189,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null,false).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -212,8 +212,13 @@ public class CategoriaProducto extends javax.swing.JFrame {
     //   adir1.setText(ResurceBundle.t("button.add"));                  // Añadir
     //AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
     //EliminarProducto.setText(ResurceBundle.t("button.delete"));      // Eliminar
-        
-    Titulo.setText(ResurceBundle.t("label.category"));//CAMBIAR PARA LIST COMPRA
+        if (cat) {
+              Titulo.setText(ResurceBundle.t("label.category"));
+  
+        }else{
+                          Titulo.setText(ResurceBundle.t("label.results"));//CUANDO VIENE DE RESULTADOS
+
+        }
     Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
         
 Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));

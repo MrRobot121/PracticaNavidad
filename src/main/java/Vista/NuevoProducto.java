@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
@@ -17,7 +18,7 @@ public class NuevoProducto extends javax.swing.JFrame {
     /**
      * Creates new form NuevoProducto
      */
-    public NuevoProducto() {
+    public NuevoProducto(Usuarios user) {
         initComponents();
          getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
@@ -188,7 +189,7 @@ public class NuevoProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new NuevoProducto().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new NuevoProducto(user).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

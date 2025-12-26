@@ -5,7 +5,7 @@ CREATE TABLE if NOT EXISTS usuarios (
     email           VARCHAR(100) NOT NULL UNIQUE,
     nombre          VARCHAR(50)  NOT NULL,
     apellido        VARCHAR(50)  NOT NULL,
-    contrasena      VARCHAR(50)  NOT NULL
+    contrasena      VARCHAR(255)  NOT NULL
 );
 CREATE TABLE  if NOT EXISTS  categoria (
     id      INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +18,8 @@ CREATE TABLE  if NOT EXISTS  producto (
     nombre              VARCHAR(100) NOT NULL,
     id_categoria        INT NOT NULL,
     cantidad            INT NOT NULL,
-    cantidad_min_deseada INT NOT NULL DEFAULT 0,
+    fecha_caducidad DATE NULL,
+     cantidad_min_deseada INT NOT NULL DEFAULT 0,
     lista_compra        BOOLEAN NOT NULL DEFAULT TRUE,
     CONSTRAINT fk_producto_usuario
         FOREIGN KEY (id_user) REFERENCES usuarios(id),
