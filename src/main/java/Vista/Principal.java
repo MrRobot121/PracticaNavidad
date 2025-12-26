@@ -262,6 +262,9 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void irSegunda(List<Producto> productos) {
+        if(productos==null){CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR);return;}
+        CategoriaProducto cat=new CategoriaProducto(user,productos,false);//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
+            
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

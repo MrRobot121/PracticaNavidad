@@ -4,10 +4,14 @@
  */
 package Vista;
 
+import Dao.Modelo.Producto;
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 /**
  *
  * @author HugoJB
@@ -15,16 +19,28 @@ import javax.swing.BorderFactory;
 public class CategoriaProducto extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CategoriaProducto.class.getName());
-
+    private final Usuarios user;
+    List<Producto> productos;
     /**
      * Creates new form CategoriaProducto
      */
-    public CategoriaProducto() {
+    public CategoriaProducto(Usuarios user, List<Producto> productosm,Boolean categoria) {
      ResurceBundle.setLocale(ResurceBundle.spanish);     initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
+            this.user = user;
 
+     if (user == null) {
+            CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
+            //System.exit(1); //ME CARGO EL PROGAMA 
+            //MEJOR ME VOY AL LOGIN
+            this.dispose();
+            InicioSesion inicioSesion = new InicioSesion();
+            inicioSesion.setVisible(true);//VA INICIO SESION
+          //  System.exit(0);
+            return;
+        }this.productos=productos;
       
         actualizarElementosIdioma();
     }
@@ -173,7 +189,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
