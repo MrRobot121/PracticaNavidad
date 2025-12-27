@@ -86,6 +86,11 @@ public class NuevoProducto extends javax.swing.JFrame {
         jScrollPane4.setViewportView(CatageriaEditText);
 
         AddButon.setText("jButton1");
+        AddButon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButonActionPerformed(evt);
+            }
+        });
 
         FechaCaducidadLabel.setText("jLabel1");
 
@@ -185,6 +190,13 @@ public class NuevoProducto extends javax.swing.JFrame {
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_RestablecerActionPerformed
+/**
+ * 
+ * @param evt 
+ */
+    private void AddButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddButonActionPerformed
 
     /**
      * @param args the command line arguments
