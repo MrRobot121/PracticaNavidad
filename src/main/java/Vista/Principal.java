@@ -5,15 +5,18 @@
 package Vista;
 
 import Dao.Daos.*;
+import Dao.Modelo.Categoria;
 import Dao.Modelo.Producto;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,6 +24,7 @@ import javax.swing.JOptionPane;
  */
 public class Principal extends javax.swing.JFrame {
 
+    List<Producto> listCaducidad;
     private final Usuarios user;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
 
@@ -46,6 +50,7 @@ public class Principal extends javax.swing.JFrame {
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
         actualizarElementosIdioma();
+        actualizarTablaCaducidad();
     }
 
     /**
@@ -120,10 +125,25 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 95)));
 
         VerProductosPorCategoria.setText("jButton1");
+        VerProductosPorCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerProductosPorCategoriaActionPerformed(evt);
+            }
+        });
 
         VerProductoSelecionado1.setText("jButton1");
+        VerProductoSelecionado1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerProductoSelecionado1ActionPerformed(evt);
+            }
+        });
 
         VerListaCompra.setText("jButton1");
+        VerListaCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerListaCompraActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -227,11 +247,101 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
         NuevoProducto nv = new NuevoProducto(user);
-            nv.setVisible(true);
-    nv.setLocationRelativeTo(null);  // Centra en pantalla
+        nv.setVisible(true);
+        nv.setLocationRelativeTo(null);  // Centra en pantalla
 
 
     }//GEN-LAST:event_NuevoProductoBottonActionPerformed
+
+    private void VerProductoSelecionado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoSelecionado1ActionPerformed
+        // TODO add your handling code here:
+        if (listCaducidad == null || listCaducidad.isEmpty()) {
+            CuadroDiologo.mostrarAviso(this, "No se puede mostrar", "La tabla esta vacia", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int fila = jTable1.getSelectedRow();
+
+        if (fila == -1) {
+            CuadroDiologo.mostrarAviso(this, "Ningún producto seleccionado", "Selecciona una fila primero", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        int filaModelo = jTable1.convertRowIndexToModel(fila);
+
+        // Obtener el Producto correspondiente de la lista
+        Producto seleccionado = listCaducidad.get(filaModelo);
+        this.dispose();
+        ProductoFicha pr = new ProductoFicha(seleccionado);
+        pr.setVisible(true);
+        pr.setLocationRelativeTo(null);
+
+
+    }//GEN-LAST:event_VerProductoSelecionado1ActionPerformed
+
+    private void VerProductosPorCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductosPorCategoriaActionPerformed
+        // TODO add your handling code here:
+        List<Categoria> categorias = DaoCategoria.buscarCategoriasDeUsuario(user.getId());
+
+        if (categorias == null || categorias.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noCategories.title"), 
+                    ResurceBundle.t("dialog.noCategories.message"), 
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
+        // HE ENCONTRADO CON LAMBA ESTO PARA PASAR A TO STRING
+        String[] nombresCat = categorias.stream()
+                .map(Categoria::getNombre) 
+                .toArray(String[]::new);
+
+        String seleccion = (String) JOptionPane.showInputDialog(
+                this,
+                ResurceBundle.t("dialog.chooseCategory.message"), 
+                ResurceBundle.t("dialog.chooseCategory.title"), 
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                nombresCat,
+                nombresCat[0]
+        );
+
+        // Si pulsa cancelar o cierra
+        if (seleccion == null) {
+            return;
+        }
+
+        // Buscar la categoría seleccionada en la lista original
+        Categoria categoriaElegida = categorias.stream()
+                .filter(c -> c.getNombre().equals(seleccion))
+                .findFirst()
+                .orElse(null);
+
+        if (categoriaElegida == null) {
+            return;
+        }
+
+        // Ahora ya tienes la Categoria; aquí decides qué hacer
+        // Por ejemplo, cargar productos de esa categoría:
+        List<Producto> productos = DaoProducto.buscarPorCategoriaYUsuario(
+                categoriaElegida.getId(), user.getId()
+        );
+
+        irSegunda(productos, true);
+
+
+    }//GEN-LAST:event_VerProductosPorCategoriaActionPerformed
+
+    private void VerListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerListaCompraActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        ListaCompra listaCompra=new ListaCompra(user);
+        listaCompra.setVisible(true);
+                listaCompra.setLocationRelativeTo(null);
+
+    }//GEN-LAST:event_VerListaCompraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,11 +394,39 @@ public class Principal extends javax.swing.JFrame {
             CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR);
             return;
         }
-            this.dispose();  // CIERRA ACTUAL
+        this.dispose();  // CIERRA ACTUAL
 
         CategoriaProducto cat = new CategoriaProducto(user, productos, categoria);//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
-    cat.setVisible(true);
-    cat.setLocationRelativeTo(null);  // Centra en pantalla
+        cat.setVisible(true);
+        cat.setLocationRelativeTo(null);  // Centra en pantalla
+    }
+
+    private void actualizarTablaCaducidad() {
+        listCaducidad = DaoProducto.buscarTop10PorCaducidad(user.getId());
+        if (listCaducidad == null || listCaducidad.isEmpty()) {
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        for (Producto p : listCaducidad) {
+            String fechaTxt = "";
+            if (p.getFechaCaducidad() != null) {
+                fechaTxt = sdf.format(p.getFechaCaducidad());
+            }
+
+            modelo.addRow(new Object[]{
+                p.getNombre(),
+                p.getIdCategoria().getNombre(),//me flipa que se pueda hacer esto
+                p.getCantidad(),
+                p.getCantidadMinDeseada(),
+                fechaTxt
+            });
+
+        }
     }
 
 }

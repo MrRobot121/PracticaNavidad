@@ -17,6 +17,7 @@
        /
  */
 /**
+ *@author HugoJB
  *@author MrRobot121
  *@version 1.0 
  *@see  
@@ -36,8 +37,11 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name = "producto")
@@ -46,6 +50,7 @@ import java.util.Collection;
     @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.id = :id"),
     @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Producto.findByCantidad", query = "SELECT p FROM Producto p WHERE p.cantidad = :cantidad"),
+    @NamedQuery(name = "Producto.findByFechaCaducidad", query = "SELECT p FROM Producto p WHERE p.fechaCaducidad = :fechaCaducidad"),
     @NamedQuery(name = "Producto.findByCantidadMinDeseada", query = "SELECT p FROM Producto p WHERE p.cantidadMinDeseada = :cantidadMinDeseada"),
     @NamedQuery(name = "Producto.findByListaCompra", query = "SELECT p FROM Producto p WHERE p.listaCompra = :listaCompra")})
 public class Producto implements Serializable {
@@ -62,6 +67,9 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @Column(name = "cantidad")
     private int cantidad;
+    @Column(name = "fecha_caducidad")
+    @Temporal(TemporalType.DATE)
+    private Date fechaCaducidad;
     @Basic(optional = false)
     @Column(name = "cantidad_min_deseada")
     private int cantidadMinDeseada;
@@ -114,6 +122,14 @@ public class Producto implements Serializable {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Date getFechaCaducidad() {
+        return fechaCaducidad;
+    }
+
+    public void setFechaCaducidad(Date fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
     }
 
     public int getCantidadMinDeseada() {

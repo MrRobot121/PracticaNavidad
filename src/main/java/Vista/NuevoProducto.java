@@ -3,24 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Vista;
+
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+
 /**
  *
  * @author HugoJB
  */
 public class NuevoProducto extends javax.swing.JFrame {
-    
+
+    private com.github.lgooddatepicker.components.DatePicker FechaPicker;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoProducto.class.getName());
 
     /**
      * Creates new form NuevoProducto
      */
     public NuevoProducto(Usuarios user) {
+        FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
+
+// Opcional: formato
+        FechaPicker.getSettings().setFormatForDatesCommonEra("dd/MM/yyyy");//PARA LA FECHA
         initComponents();
-         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
 
@@ -49,6 +56,8 @@ public class NuevoProducto extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         CatageriaEditText = new TextPaneBonito();
         AddButon = new BotonBonito("");
+        FechaCaducidadLabel = new LabelBonito("");
+        jScrollPane6 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -77,6 +86,13 @@ public class NuevoProducto extends javax.swing.JFrame {
         jScrollPane4.setViewportView(CatageriaEditText);
 
         AddButon.setText("jButton1");
+        AddButon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddButonActionPerformed(evt);
+            }
+        });
+
+        FechaCaducidadLabel.setText("jLabel1");
 
         jMenu1.setText("Ir a");
 
@@ -112,15 +128,6 @@ public class NuevoProducto extends javax.swing.JFrame {
                         .addGap(85, 85, 85)
                         .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(CatageriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(MininmoDesadoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(AddButon, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,7 +138,18 @@ public class NuevoProducto extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(nombreL, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(29, 29, 29)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(CatageriaLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(MininmoDesadoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(FechaCaducidadLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(jScrollPane6))))
                 .addGap(85, 85, 85))
         );
         layout.setVerticalGroup(
@@ -153,12 +171,18 @@ public class NuevoProducto extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CatageriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CatageriaLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FechaCaducidadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
                 .addComponent(AddButon)
-                .addGap(50, 50, 50))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jScrollPane6.setViewportView( FechaPicker);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -166,6 +190,13 @@ public class NuevoProducto extends javax.swing.JFrame {
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_RestablecerActionPerformed
+/**
+ * 
+ * @param evt 
+ */
+    private void AddButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddButonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,7 +220,7 @@ public class NuevoProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new NuevoProducto(user).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new NuevoProducto(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -198,6 +229,7 @@ public class NuevoProducto extends javax.swing.JFrame {
     private javax.swing.JLabel CantidadLabel;
     private javax.swing.JTextPane CatageriaEditText;
     private javax.swing.JLabel CatageriaLabel;
+    private javax.swing.JLabel FechaCaducidadLabel;
     private javax.swing.JTextPane MininmoDesadoEdit;
     private javax.swing.JLabel MininmoDesadoLabel;
     private javax.swing.JTextPane NombreEd;
@@ -212,35 +244,36 @@ public class NuevoProducto extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel nombreL;
     // End of variables declaration//GEN-END:variables
 private void actualizarElementosIdioma() {
 
-    // Título
-    Titulo.setText(ResurceBundle.t("label.newProduct"));
+        // Título
+        Titulo.setText(ResurceBundle.t("label.newProduct"));
 
-    // Labels
-    nombreL.setText(ResurceBundle.t("table.product.name"));
-    CantidadLabel.setText(ResurceBundle.t("label.quantity"));
-    MininmoDesadoLabel.setText(ResurceBundle.t("table.product.minQuantity"));
-    CatageriaLabel.setText(ResurceBundle.t("table.product.category"));
+        // Labels
+        nombreL.setText(ResurceBundle.t("table.product.name"));
+        CantidadLabel.setText(ResurceBundle.t("label.quantity"));
+        MininmoDesadoLabel.setText(ResurceBundle.t("table.product.minQuantity"));
+        CatageriaLabel.setText(ResurceBundle.t("table.product.category"));
 
-    // Tooltips campos
-    NombreEd.setToolTipText(ResurceBundle.t("label.addProductName"));
-    CantidadEdit.setToolTipText(ResurceBundle.t("label.addProductQuantity"));
-    MininmoDesadoEdit.setToolTipText(ResurceBundle.t("label.addProductMinQuantity"));
-    CatageriaEditText.setToolTipText(ResurceBundle.t("label.addProductCategory"));
+        // Tooltips campos
+        NombreEd.setToolTipText(ResurceBundle.t("label.addProductName"));
+        CantidadEdit.setToolTipText(ResurceBundle.t("label.addProductQuantity"));
+        MininmoDesadoEdit.setToolTipText(ResurceBundle.t("label.addProductMinQuantity"));
+        CatageriaEditText.setToolTipText(ResurceBundle.t("label.addProductCategory"));
 
-    // Botón principal
-    AddButon.setText(ResurceBundle.t("button.saveProduct"));
+        // Botón principal
+        AddButon.setText(ResurceBundle.t("button.saveProduct"));
 
-    // Menú
-    jMenu1.setText(ResurceBundle.t("menu.navigation"));     
-    jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
-    editar.setText(ResurceBundle.t("menu.edit"));
-    jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
-    Restablecer.setText(ResurceBundle.t("button.resetForm"));
-}
-
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+        editar.setText(ResurceBundle.t("menu.edit"));
+        jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
+        Restablecer.setText(ResurceBundle.t("button.resetForm"));
+        FechaCaducidadLabel.setText(ResurceBundle.t("label.dateExpiraton"));
+    }
 
 }
