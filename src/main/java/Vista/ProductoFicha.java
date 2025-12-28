@@ -4,10 +4,15 @@
  */
 package Vista;
 
+import Controlador.Controlador;
+import Dao.Daos.DaoProducto;
 import Dao.Modelo.Producto;
+import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,22 +20,61 @@ import java.awt.Color;
  */
 public class ProductoFicha extends javax.swing.JFrame {
 
+    private static Usuarios user;
     private com.github.lgooddatepicker.components.DatePicker FechaPicker;
-
+    private Producto producto;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProductoFicha.class.getName());
 
     /**
-     * Creates new form ProductoFicha
+     *
+     * @param seleccionado
+     * @param user Realmente no lo utiliza solo lo utiliza para volver al principal y no perderlo y estropear todo
      */
-    public ProductoFicha(Producto seleccionado) {
+    public ProductoFicha(Producto seleccionado, Usuarios user) {
+        this.user = user;//ANTES DE HACR NADA SI NO HAY USER NO FUNCIONA
+        this.producto = producto;
+        if (user == null) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noUser.title"), // "Sin usuario"
+                    ResurceBundle.t("dialog.noUser.message"), // "No se puede ejecutar sin usuario"
+                    JOptionPane.ERROR_MESSAGE
+            );
+            this.dispose();
+            InicioSesion inicioSesion = new InicioSesion();
+            inicioSesion.setVisible(true);
+            return;
+        }
+
+        if (producto == null) {
+            errorNoProducto(user);//AQUI SE MUERE ESTA PANTALLA
+            return;
+        }
+
         FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
+
         initComponents();
-        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+
+        getContentPane()
+                .setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
 
         ResurceBundle.setLocale(ResurceBundle.spanish);
         actualizarElementosIdioma();
+    }
+
+    private void errorNoProducto(Usuarios user1) {
+        CuadroDiologo.mostrarAviso(
+                this,
+                ResurceBundle.t("dialog.noProduct.title"),
+                ResurceBundle.t("dialog.noProduct.message"),
+                JOptionPane.ERROR_MESSAGE
+        );
+        this.dispose();
+        Principal principal = new Principal(user1);
+        principal.setVisible(true);
+        return;
     }
 
     /**
@@ -56,6 +100,8 @@ public class ProductoFicha extends javax.swing.JFrame {
         EliminarProducto = new BotonBonito("");
         CantidadMinimaL1 = new LabelBonito("");
         jScrollPane6 = new javax.swing.JScrollPane();
+        ListaCompraL = new LabelBonito("");
+        ListaCompraD = new LabelBonito("");
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -117,6 +163,10 @@ public class ProductoFicha extends javax.swing.JFrame {
 
         CantidadMinimaL1.setText("jLabel1");
 
+        ListaCompraL.setText("jLabel1");
+
+        ListaCompraD.setText("jLabel1");
+
         jMenu1.setText("Ir a");
 
         jMenuItem2.setText("Menu");
@@ -143,7 +193,8 @@ public class ProductoFicha extends javax.swing.JFrame {
                     .addComponent(CantidadProductoL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Añadir1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                     .addComponent(AñadirListaCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                    .addComponent(CantidadMinimaL1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(CantidadMinimaL1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ListaCompraL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(CategoriaDato, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
@@ -152,7 +203,8 @@ public class ProductoFicha extends javax.swing.JFrame {
                     .addComponent(CantidadMinimaDato, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(EliminarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                     .addComponent(jScrollPane6)
-                    .addComponent(Restar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Restar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ListaCompraD, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -182,13 +234,17 @@ public class ProductoFicha extends javax.swing.JFrame {
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ListaCompraL, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ListaCompraD, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Añadir1)
                     .addComponent(Restar1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AñadirListaCompra)
                     .addComponent(EliminarProducto))
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         jScrollPane6.setViewportView( FechaPicker);
@@ -198,34 +254,67 @@ public class ProductoFicha extends javax.swing.JFrame {
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Añadir1ActionPerformed
+        Controlador.modifiacarCantidad(producto, 1);
+        actualizarElementosIdioma();
 
+    }//GEN-LAST:event_Añadir1ActionPerformed
+/**
+ * VA A PRINCIPAL 
+ * @param evt 
+ */
     private void Enviar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Enviar1ActionPerformed
         // TODO add your handling code here:
+        Controlador.goPrincipal(this, user);
+
+
     }//GEN-LAST:event_Enviar1ActionPerformed
 
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
         // TODO add your handling code here:
+        Controlador.modifiacarCantidad(producto, -1);
+        actualizarElementosIdioma();
+
     }//GEN-LAST:event_Restar1ActionPerformed
 
     private void AñadirListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirListaCompraActionPerformed
         // TODO add your handling code here:
+        this.producto.setListaCompra(true);
+        new DaoProducto().update(producto);
+        CuadroDiologo.mostrarAviso(
+                this,
+                ResurceBundle.t("dialog.addedToList.title"), // "Añadido a lista"
+                ResurceBundle.t("dialog.addedToList.message"), // "Añadido a la lista de la compra correctamente"
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }//GEN-LAST:event_AñadirListaCompraActionPerformed
 
     private void EliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarProductoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_EliminarProductoActionPerformed
+        if (!CuadroDiologo.confirmarEliminacion(this, ResurceBundle.t("dialog.confirmDelete.message"), ResurceBundle.t("dialog.confirmDelete.title"))) {
+            return;
+        }
+        new DaoProducto().delete(producto.getId());
+        CuadroDiologo.mostrarAviso(
+                this,
+                ResurceBundle.t("dialog.deleteSuccess.title"), // "Eliminado correctamente"
+                ResurceBundle.t("dialog.deleteSuccess.message"), // "Producto eliminado correctamente"
+                JOptionPane.INFORMATION_MESSAGE
+        );
+        Controlador.goPrincipal(this, user);
 
+
+    }//GEN-LAST:event_EliminarProductoActionPerformed
+    /*
     /**
      * @param args the command line arguments
-     */
+     *//*
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
+     */
+ /*  try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -237,10 +326,10 @@ public class ProductoFicha extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the form *//*
         java.awt.EventQueue.invokeLater(() -> new ProductoFicha(null).setVisible(true));
     }
-
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Añadir1;
     private javax.swing.JButton AñadirListaCompra;
@@ -253,6 +342,8 @@ public class ProductoFicha extends javax.swing.JFrame {
     private javax.swing.JLabel CategoriaL;
     private javax.swing.JButton EliminarProducto;
     private javax.swing.JButton Enviar1;
+    private javax.swing.JLabel ListaCompraD;
+    private javax.swing.JLabel ListaCompraL;
     private javax.swing.JLabel NombreDato;
     private javax.swing.JLabel NombreL;
     private javax.swing.JButton Restar1;
@@ -263,15 +354,16 @@ public class ProductoFicha extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     // End of variables declaration//GEN-END:variables
   private void actualizarElementosIdioma() {
-
-        // Título
+        if (producto == null) {
+            errorNoProducto(user);//ADIOS ESTA PANTALLA
+        }
         Titulo.setText(ResurceBundle.t("label.product"));
 
         NombreL.setText(ResurceBundle.t("table.product.name"));
         CantidadProductoL.setText(ResurceBundle.t("table.product.quantity"));
         CantidadMinimaL.setText(ResurceBundle.t("table.product.minQuantity"));
         CategoriaL.setText(ResurceBundle.t("table.product.category"));
-
+        ListaCompraL.setText(ResurceBundle.t("label.shoppingListTitle"));
         // Botones
         Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
         AñadirListaCompra.setText(ResurceBundle.t("label.shoppingList"));// Ver lista de compra
@@ -285,5 +377,17 @@ public class ProductoFicha extends javax.swing.JFrame {
         /* editar.setText(ResurceBundle.t("menu.edit"));
     jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
     Restablecer.setText(ResurceBundle.t("button.resetForm"));*/
+        NombreDato.setText(producto.getNombre());
+        CantidadDato.setText(producto.getCantidad() + "");//TARDO MENOS QUE CON EL TOSRING
+        CantidadMinimaDato.setText(producto.getCantidadMinDeseada() + "");
+        if (producto.getFechaCaducidad() != null) {//LO TENGO QUE CONVERTIR PA USAR
+            java.time.LocalDate fechaLocal = producto.getFechaCaducidad()
+                    .toInstant()//COJE MOMENTO
+                    .atZone(java.time.ZoneId.systemDefault())//LA ZONA HORARIA
+                    .toLocalDate();//CONVIERTE
+            FechaPicker.setDate(fechaLocal);
+        }
+        ListaCompraD.setText(producto.getListaCompra() ? ResurceBundle.t("label.inShoppingList") : ResurceBundle.t("label.notInShoppingList"));
+
     }
 }

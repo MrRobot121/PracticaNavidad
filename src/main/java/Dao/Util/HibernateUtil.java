@@ -43,7 +43,7 @@ public class HibernateUtil {
 
             // Propiedades directas (sin archivo properties)
             config.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-            config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/Inventario_Hogar?useSSL=false&serverTimezone=UTC");
+            config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3307/Inventario_Hogar?useSSL=false&serverTimezone=UTC");
             config.setProperty("hibernate.connection.username", "root");
             config.setProperty("hibernate.connection.password", "root");
             config.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
@@ -65,7 +65,6 @@ config.setProperty("hibernate.jmx.enabled", "false");  // ← MÁS LIMPIO
             config.addAnnotatedClass(RegistroInicio.class);
             config.addAnnotatedClass(RegistroRecuperacion.class);
 
-            config.addAnnotatedClass(ListaCompra.class);
 
             sessionFactory = config.buildSessionFactory();
         } catch (Throwable ex) {

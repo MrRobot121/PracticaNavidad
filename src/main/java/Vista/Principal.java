@@ -272,7 +272,7 @@ public class Principal extends javax.swing.JFrame {
         // Obtener el Producto correspondiente de la lista
         Producto seleccionado = listCaducidad.get(filaModelo);
         this.dispose();
-        ProductoFicha pr = new ProductoFicha(seleccionado);
+        ProductoFicha pr = new ProductoFicha(seleccionado, user);
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
 
@@ -286,8 +286,8 @@ public class Principal extends javax.swing.JFrame {
         if (categorias == null || categorias.isEmpty()) {
             CuadroDiologo.mostrarAviso(
                     this,
-                    ResurceBundle.t("dialog.noCategories.title"), 
-                    ResurceBundle.t("dialog.noCategories.message"), 
+                    ResurceBundle.t("dialog.noCategories.title"),
+                    ResurceBundle.t("dialog.noCategories.message"),
                     JOptionPane.INFORMATION_MESSAGE
             );
             return;
@@ -295,13 +295,13 @@ public class Principal extends javax.swing.JFrame {
 
         // HE ENCONTRADO CON LAMBA ESTO PARA PASAR A TO STRING
         String[] nombresCat = categorias.stream()
-                .map(Categoria::getNombre) 
+                .map(Categoria::getNombre)
                 .toArray(String[]::new);
 
         String seleccion = (String) JOptionPane.showInputDialog(
                 this,
-                ResurceBundle.t("dialog.chooseCategory.message"), 
-                ResurceBundle.t("dialog.chooseCategory.title"), 
+                ResurceBundle.t("dialog.chooseCategory.message"),
+                ResurceBundle.t("dialog.chooseCategory.title"),
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 nombresCat,
@@ -337,9 +337,9 @@ public class Principal extends javax.swing.JFrame {
     private void VerListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerListaCompraActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ListaCompra listaCompra=new ListaCompra(user);
+        ListaCompra listaCompra = new ListaCompra(user);
         listaCompra.setVisible(true);
-                listaCompra.setLocationRelativeTo(null);
+        listaCompra.setLocationRelativeTo(null);
 
     }//GEN-LAST:event_VerListaCompraActionPerformed
 

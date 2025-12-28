@@ -6,7 +6,6 @@
     <class>Dao.Modelo.RegistroRecuperacion</class>
     <class>Dao.Modelo.Producto</class>
     <class>Dao.Modelo.Usuarios</class>
-    <class>Dao.Modelo.ListaCompra</class>
     <class>Dao.Modelo.Categoria</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Inventario_Hogar?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

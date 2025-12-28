@@ -198,5 +198,25 @@ public static List<Producto> buscarPorCategoriaYUsuario(int idCategoria, int use
         .getResultList();
     }
 }
+/**
+ * DEVUELVE LOS ELEMENTOS QUE ESTEN TENGAN LISTA COMPRA TRUE Y que EL ID USER SEA userDI
+ * @param userId
+ * @return 
+ */
+public static List<Producto> buscarProductosListaCompra(int userId) {
+    try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+        return session.createQuery(
+                "FROM Producto p " +
+                "WHERE p.idUser.id = :userId " +
+                "AND p.listaCompra = true " +
+                "AND p.cantidad < p.cantidadMinDeseada " +
+                "ORDER BY p.nombre",
+                Producto.class
+        )
+        .setParameter("userId", userId)
+        .getResultList();
+    }
+}
+
 
 }
