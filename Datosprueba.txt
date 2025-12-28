@@ -1,0 +1,20 @@
+INSERT INTO categoria (nombre)
+VALUES
+  ('Lácteos'),
+  ('Bebidas'),
+  ('Conservas'),
+  ('Frutas'),
+  ('Congelados');
+INSERT INTO producto
+  (id_user, nombre, id_categoria, cantidad, fecha_caducidad, cantidad_min_deseada, lista_compra)
+VALUES
+  (1, 'Leche entera 1L',      1, 4, '2025-01-10', 2, FALSE),
+  (1, 'Yogur natural',        1, 8, '2025-01-05', 4, FALSE),
+  (1, 'Zumo de naranja',      2, 3, '2025-02-20', 1, FALSE),
+  (1, 'Agua mineral 1.5L',    2, 6, '2026-01-01', 3, FALSE),
+  (1, 'Atún en lata',         3,10, '2027-03-15', 4, FALSE),
+  (1, 'Tomate triturado',     3, 5, '2026-04-30', 2, FALSE),
+  (1, 'Manzanas',             4, 6, '2024-12-30', 3, FALSE),
+  (1, 'Plátanos',             4, 5, '2024-12-28', 3, FALSE),
+  (1, 'Pizza congelada',      5, 2, '2026-06-10', 1, FALSE),
+  (1, 'Verduras congeladas',  5, 4, '2026-05-05', 2, FALSE);

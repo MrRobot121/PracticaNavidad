@@ -4,28 +4,45 @@
  */
 package Vista;
 
+import Controlador.Controlador;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
 import java.util.UUID;
+
+
 /**
+ * Ventana para recuperación de contraseña por email.
+ * Permite introducir un email, validar usuario y simular envío de token
+ * de recuperación (funcionalidad pendiente de completar).
  *
  * @author HugoJB
  */
 public class RecuperarContraseña extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RecuperarContraseña.class.getName());
 
     /**
-     * Creates new form RecuperarContraseña
+     * Crea la ventana de recuperación de contraseña.
+     * Aplica idioma, configura fondo oscuro y Enter en el campo email.
+     *
+     * @param idioma Código de idioma a aplicar (por ejemplo "es" o "en").
      */
-    public RecuperarContraseña() {
+    public RecuperarContraseña(String idioma) {
         initComponents();
-                getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
-        ResurceBundle.setLocale(ResurceBundle.spanish);
-                actualizarElementosIdioma();
-
+        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
+        ResurceBundle.setLocale(idioma);
+        actualizarElementosIdioma();
+        //PARA LOS ENTER
+         userPane.addKeyListener(new java.awt.event.KeyAdapter() {
+        @Override
+        public void keyPressed(java.awt.event.KeyEvent evt) {
+            if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                EnviarCorreo();
+            }
+        }
+    });
 
     }
 
@@ -43,6 +60,16 @@ public class RecuperarContraseña extends javax.swing.JFrame {
         VolverIncioSesion = new BotonBonito("");
         EnviarCorreo1 = new BotonBonito("");
         men = new LabelMensaje();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        IrMenuOp = new javax.swing.JMenuItem();
+        editar = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Restablecer = new javax.swing.JMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -94,8 +121,66 @@ public class RecuperarContraseña extends javax.swing.JFrame {
                 .addComponent(EnviarCorreo1)
                 .addGap(60, 60, 60)
                 .addComponent(VolverIncioSesion)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
+
+        jMenu1.setText("Ir a");
+
+        IrMenuOp.setText("Menu");
+        IrMenuOp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IrMenuOpActionPerformed(evt);
+            }
+        });
+        jMenu1.add(IrMenuOp);
+
+        jMenuBar1.add(jMenu1);
+
+        editar.setText("Editar");
+
+        jMenuItem1.setText("Guardar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        editar.add(jMenuItem1);
+
+        Restablecer.setText("Restablecer");
+        Restablecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestablecerActionPerformed(evt);
+            }
+        });
+        editar.add(Restablecer);
+
+        jMenuBar1.add(editar);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,41 +198,95 @@ public class RecuperarContraseña extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Acción del botón "Enviar correo".
+     * Delega a {@link #EnviarCorreo()} para reutilizar lógica.
+     *
+     * @param evt Evento de acción del botón.
+     */
     private void EnviarCorreo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarCorreo1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("ALGO");
-         String email = userPane.getText().trim();
-    
-    if (email.isEmpty()) {
-        men.setText(ResurceBundle.t("error.required"));
-        return;
-    }
-    
-    // Buscar usuario por email
-    Usuarios usuario = Dao.Daos.DaoUser.buscarPorEmail(email);
-    
-    if (usuario == null) {
-        men.setText(ResurceBundle.t("recover.error"));
-    } else {
-        // SIMULAR envío (genera token)
-        String token = UUID.randomUUID().toString();
-        // TODO: Guardar token en BD con fecha expiración
-        
-        men.setText(ResurceBundle.t("recover.success"));
-        
-        // En producción: JavaMailSender envía email con link
-        // http://localhost:8080/recuperar?token=abc123
-    }
-    }//GEN-LAST:event_EnviarCorreo1ActionPerformed
+        EnviarCorreo();
 
+    }//GEN-LAST:event_EnviarCorreo1ActionPerformed
+     /**
+     * Valida email introducido, busca usuario en BD y simula envío de token
+     * de recuperación de contraseña (JavaMail pendiente).
+     * Actualiza mensaje de estado según resultado.
+     */
+    private void EnviarCorreo() {
+        System.out.println("ALGO");
+        String email = userPane.getText().trim();
+
+        if (email.isEmpty()) {
+            men.setText(ResurceBundle.t("error.required"));
+            return;
+        }
+
+        // Buscar usuario por email
+        Usuarios usuario = Dao.Daos.DaoUser.buscarPorEmail(email);
+
+        if (usuario == null) {
+            men.setText(ResurceBundle.t("recover.error"));
+        } else {
+            // SIMULAR envío (genera token)
+            String token = UUID.randomUUID().toString();
+            // TODO: Guardar token en BD con fecha expiración
+
+            men.setText(ResurceBundle.t("recover.success"));
+
+            // nO ME VA : JavaMailSender envía email con link
+            // http://localhost:8080/recuperar?token=abc123 teoriacemte lo he borrado al dar  muchas expeciones
+        }
+    }
+     /**
+     * Cierra ventana actual y vuelve a InicioSesion.
+     *
+     * @param evt Evento del botón "Volver a inicio de sesión".
+     */
     private void VolverIncioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VolverIncioSesionActionPerformed
-  this.dispose();  // Cierra RecuperarContraseña
-    
-    InicioSesion loginFrame = new InicioSesion();
-    loginFrame.setVisible(true);
-    loginFrame.setLocationRelativeTo(null);  // Centra en pantalla        
+        this.dispose();  // Cierra RecuperarContraseña
+
+        InicioSesion loginFrame = new InicioSesion(ResurceBundle.getIdiomaActual());
+        loginFrame.setVisible(true);
+        loginFrame.setLocationRelativeTo(null);  // Centra en pantalla        
     }//GEN-LAST:event_VolverIncioSesionActionPerformed
+/**
+     * Opción de menú "Guardar".
+     * Reutiliza lógica de {@link #EnviarCorreo()}.
+     *
+     * @param evt Evento del elemento de menú.
+     */
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        EnviarCorreo();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
+        // TODO add your handling code here:
+        restablecer();
+    }//GEN-LAST:event_RestablecerActionPerformed
+
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_EspañolActionPerformed
+
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_InglesActionPerformed
+   /**
+     * Cambia idioma a español y actualiza textos.
+     *
+     * @param evt Evento del menú Español.
+     */
+    private void IrMenuOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IrMenuOpActionPerformed
+        // TODO add your handling code here:
+        Controlador.goInicioSesion(this, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_IrMenuOpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -171,13 +310,23 @@ public class RecuperarContraseña extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new RecuperarContraseña().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new RecuperarContraseña(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
+    private javax.swing.JMenu CambioIdioma;
     private javax.swing.JButton EnviarCorreo1;
+    private javax.swing.JMenuItem Español;
+    private javax.swing.JMenuItem Ingles;
+    private javax.swing.JMenuItem IrMenuOp;
+    private javax.swing.JMenuItem Restablecer;
     private javax.swing.JLabel TItuloL;
     private javax.swing.JButton VolverIncioSesion;
+    private javax.swing.JMenu editar;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel men;
@@ -185,10 +334,27 @@ public class RecuperarContraseña extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
    private void actualizarElementosIdioma() {
         TItuloL.setText(ResurceBundle.t("button.recoverPassword"));
- men.setText(ResurceBundle.t("label.recoverInfo"));
+        men.setText(ResurceBundle.t("label.recoverInfo"));
         userPane.setToolTipText(ResurceBundle.t("label.email"));
         VolverIncioSesion.setText(ResurceBundle.t("button.backToLogin"));
         EnviarCorreo1.setText(ResurceBundle.t("button.recoverPassword"));
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        IrMenuOp.setText(ResurceBundle.t("button.backToLogin"));
+
+        //IDIOMA CAMBIAR
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));  // "Accesibilidad"
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
+        Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
+        Ingles.setText(ResurceBundle.t("language.english"));   // "English"
+
+    }
+
+    private void restablecer() {
+        men.setText(ResurceBundle.t("label.recoverInfo"));
+
+        userPane.setText("");
+
     }
 
 }

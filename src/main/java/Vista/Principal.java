@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Controlador.Controlador;
 import Dao.Daos.*;
 import Dao.Modelo.Categoria;
 import Dao.Modelo.Producto;
@@ -11,6 +12,7 @@ import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -19,36 +21,48 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Ventana principal de la aplicación de inventario. Desde aquí se puede buscar productos, crear nuevos, ver por caducidad, categorías y acceder a la lista de la compra.
  *
  * @author HugoJB
  */
 public class Principal extends javax.swing.JFrame {
 
+    /**
+     * Lista de productos usada para la tabla de caducidad.
+     */
     List<Producto> listCaducidad;
+
+    /**
+     * Usuario autenticado que usa la aplicación.
+     */
     private final Usuarios user;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
 
     /**
-     * Creates new form Principal
+     * Crea la ventana principal. Valida que exista usuario, aplica idioma, inicializa componentes y carga la tabla de productos próximos a caducar.
+     *
+     * @param usuario Usuario autenticado. Si es null, se vuelve a InicioSesion.
+     * @param idiomaActual Código de idioma a aplicar (por ejemplo "es" o "en").
      */
-    public Principal(Usuarios usuario) {
+    public Principal(Usuarios usuario, String idiomaActual) {
         this.user = usuario;
         if (user == null) {
             CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
             //System.exit(1); //ME CARGO EL PROGAMA 
             //MEJOR ME VOY AL LOGIN
             this.dispose();
-            InicioSesion inicioSesion = new InicioSesion();
+            InicioSesion inicioSesion = new InicioSesion(idiomaActual);
             inicioSesion.setVisible(true);//VA INICIO SESION
             //  System.exit(0);
             return;
         }
-        ResurceBundle.setLocale(ResurceBundle.spanish);
+        ResurceBundle.setLocale(idiomaActual);
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 
-// o en tu panel principal:
-//panelPrincipal.setBackground(new Color(30, 30, 35));
+        // o en tu panel principal:
+        //panelPrincipal.setBackground(new Color(30, 30, 35));
         actualizarElementosIdioma();
         actualizarTablaCaducidad();
     }
@@ -69,6 +83,18 @@ public class Principal extends javax.swing.JFrame {
         VerProductosPorCategoria = new BotonBonito("");
         VerProductoSelecionado1 = new BotonBonito("");
         VerListaCompra = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        ExitOption = new javax.swing.JMenuItem();
+        Editar = new javax.swing.JMenu();
+        jMenuItem1Buscar = new javax.swing.JMenuItem();
+        jMenuItem1NuevoProducto = new javax.swing.JMenuItem();
+        CierrreSesion = new javax.swing.JMenu();
+        jMenuItem1CierreSesionItem = new javax.swing.JMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -180,13 +206,85 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(VerProductosPorCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(VerListaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap(124, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                     .addContainerGap(487, Short.MAX_VALUE)
                     .addComponent(VerProductoSelecionado1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(295, 295, 295)))
         );
+
+        jMenu1.setText("Ir a");
+
+        ExitOption.setText("Exit");
+        ExitOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitOptionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ExitOption);
+
+        jMenuBar1.add(jMenu1);
+
+        Editar.setText("Editar");
+
+        jMenuItem1Buscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.META_DOWN_MASK));
+        jMenuItem1Buscar.setText("Buscar");
+        jMenuItem1Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1BuscarActionPerformed(evt);
+            }
+        });
+        Editar.add(jMenuItem1Buscar);
+
+        jMenuItem1NuevoProducto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.META_DOWN_MASK));
+        jMenuItem1NuevoProducto.setText("jMenuItem1");
+        jMenuItem1NuevoProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1NuevoProductoActionPerformed(evt);
+            }
+        });
+        Editar.add(jMenuItem1NuevoProducto);
+
+        jMenuBar1.add(Editar);
+
+        CierrreSesion.setText("CIerre ssion");
+
+        jMenuItem1CierreSesionItem.setText("jMenuItem1");
+        jMenuItem1CierreSesionItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1CierreSesionItemActionPerformed(evt);
+            }
+        });
+        CierrreSesion.add(jMenuItem1CierreSesionItem);
+
+        jMenuBar1.add(CierrreSesion);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,8 +305,22 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   /**
+     * Acción del botón Buscar. Abre un cuadro de texto para introducir el nombre y llama a {@link #buscar()}.
+     *
+     * @param evt Evento de acción del botón.
+     */
     private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        if (buscar())
+            return;
+    }//GEN-LAST:event_BuscarActionPerformed
+    /**
+     * Muestra un cuadro de búsqueda de producto y navega a la ventana de resultados. Si el texto está vacío, busca todos los productos del usuario; si no, busca por prefijo de nombre.
+     *
+     * @return true si el usuario cancela o cierra el cuadro de diálogo, false en caso contrario.
+     * @throws HeadlessException Si el entorno no soporta interfaz gráfica.
+     */
+    private boolean buscar() throws HeadlessException {
         // TODO add your handling code here:
         String texto = JOptionPane.showInputDialog(
                 this,
@@ -216,14 +328,11 @@ public class Principal extends javax.swing.JFrame {
                 ResurceBundle.t("button.search"), // título
                 JOptionPane.QUESTION_MESSAGE
         );
-
         // Si pulsa Cancelar o cierra el diálogo, no haces nada
         if (texto == null) {
-            return;
+            return true;
         }
-
         texto = texto.trim();
-
         if (texto.isEmpty()) {
             // Buscar TODOS los productos del usuario actual
 
@@ -233,26 +342,30 @@ public class Principal extends javax.swing.JFrame {
         } else {
             // Buscar productos cuyo nombre empiece por 'texto' para ese usuario
             List<Producto> productos = Dao.Daos.DaoProducto.buscarPorNombreYUsuario(texto, user.getId());
+            System.out.println("\n\n\n" + productos.size());
             //  actualizarTabla(productos);
             irSegunda(productos, false);
 
         }
-    }//GEN-LAST:event_BuscarActionPerformed
-    /**
-     * Va a nuevo producto y lo crea
+        return false;
+    }
+   /**
+     * Va a la ventana de creación de nuevo producto.
      *
-     * @param evt
+     * @param evt Evento de acción del botón "Nuevo producto".
      */
     private void NuevoProductoBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoProductoBottonActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        NuevoProducto nv = new NuevoProducto(user);
-        nv.setVisible(true);
-        nv.setLocationRelativeTo(null);  // Centra en pantalla
+        Controlador.goNuevoProducto(this, user, ResurceBundle.getIdiomaActual());
 
 
     }//GEN-LAST:event_NuevoProductoBottonActionPerformed
 
+/**
+     * Abre la ficha del producto seleccionado en la tabla de caducidad.
+     * Valida que haya datos y una fila seleccionada.
+     *
+     * @param evt Evento de acción del botón "Ver producto seleccionado".
+     */
     private void VerProductoSelecionado1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoSelecionado1ActionPerformed
         // TODO add your handling code here:
         if (listCaducidad == null || listCaducidad.isEmpty()) {
@@ -271,14 +384,23 @@ public class Principal extends javax.swing.JFrame {
 
         // Obtener el Producto correspondiente de la lista
         Producto seleccionado = listCaducidad.get(filaModelo);
+        if (seleccionado != null) {
+            System.out.println(seleccionado.getNombre());
+
+        }
         this.dispose();
-        ProductoFicha pr = new ProductoFicha(seleccionado, user);
+        ProductoFicha pr = new ProductoFicha(seleccionado, user, ResurceBundle.getIdiomaActual());
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
 
 
     }//GEN-LAST:event_VerProductoSelecionado1ActionPerformed
-
+/**
+     * Permite seleccionar una categoría y ver todos los productos del usuario
+     * pertenecientes a esa categoría en una nueva ventana.
+     *
+     * @param evt Evento de acción del botón "Ver productos por categoría".
+     */
     private void VerProductosPorCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductosPorCategoriaActionPerformed
         // TODO add your handling code here:
         List<Categoria> categorias = DaoCategoria.buscarCategoriasDeUsuario(user.getId());
@@ -333,15 +455,71 @@ public class Principal extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_VerProductosPorCategoriaActionPerformed
-
+/**
+     * Abre la ventana de Lista de compra.
+     *
+     * @param evt Evento de acción del botón "Ver lista de compra".
+     */
     private void VerListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerListaCompraActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        ListaCompra listaCompra = new ListaCompra(user);
+        ListaCompra listaCompra = new ListaCompra(user, ResurceBundle.getIdiomaActual());
         listaCompra.setVisible(true);
         listaCompra.setLocationRelativeTo(null);
 
     }//GEN-LAST:event_VerListaCompraActionPerformed
+/**
+     * Opción de menú "Buscar".
+     * Reutiliza la lógica de {@link #buscar()}.
+     *
+     * @param evt Evento del elemento de menú.
+     */
+    private void jMenuItem1BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1BuscarActionPerformed
+        // TODO add your handling code here:
+        buscar();
+    }//GEN-LAST:event_jMenuItem1BuscarActionPerformed
+    /**
+     * Opción de menú "Nuevo producto".
+     * Reutiliza la lógica del botón de nuevo producto.
+     *
+     * @param evt Evento del elemento de menú.
+     */
+    private void jMenuItem1NuevoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1NuevoProductoActionPerformed
+        // TODO add your handling code here:
+        Controlador.goNuevoProducto(this, user, ResurceBundle.getIdiomaActual());
+
+    }//GEN-LAST:event_jMenuItem1NuevoProductoActionPerformed
+    /**
+     * Cierra sesión del usuario actual y vuelve a la pantalla de inicio de sesión.
+     *
+     * @param evt Evento del elemento de menú "Cerrar sesión".
+     */
+    private void jMenuItem1CierreSesionItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1CierreSesionItemActionPerformed
+        // TODO add your handling code here:
+        Controlador.goInicioSesion(this, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_jMenuItem1CierreSesionItemActionPerformed
+    /**
+     * Sale completamente de la aplicación.
+     *
+     * @param evt Evento del elemento de menú "Exit".
+     */
+    private void ExitOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitOptionActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);//SALE DEL PROGAMA
+    }//GEN-LAST:event_ExitOptionActionPerformed
+
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_EspañolActionPerformed
+
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+
+    }//GEN-LAST:event_InglesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -365,16 +543,28 @@ public class Principal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Principal(null).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Principal(null, ResurceBundle.getIdiomaActual()).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
     private javax.swing.JButton Buscar;
     private javax.swing.JLabel CaducidadProsima;
+    private javax.swing.JMenu CambioIdioma;
+    private javax.swing.JMenu CierrreSesion;
+    private javax.swing.JMenu Editar;
+    private javax.swing.JMenuItem Español;
+    private javax.swing.JMenuItem ExitOption;
+    private javax.swing.JMenuItem Ingles;
     private javax.swing.JButton NuevoProductoBotton;
     private javax.swing.JButton VerListaCompra;
     private javax.swing.JButton VerProductoSelecionado1;
     private javax.swing.JButton VerProductosPorCategoria;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1Buscar;
+    private javax.swing.JMenuItem jMenuItem1CierreSesionItem;
+    private javax.swing.JMenuItem jMenuItem1NuevoProducto;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
@@ -387,20 +577,48 @@ public class Principal extends javax.swing.JFrame {
         VerProductoSelecionado1.setText(ResurceBundle.t("button.viewSelectedProduct"));
         VerProductosPorCategoria.setText(ResurceBundle.t("label.viewByCategory"));
 
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        ExitOption.setText(ResurceBundle.t("menuItem.exit"));
+        Editar.setText(ResurceBundle.t("menu.edit"));
+        jMenuItem1Buscar.setText(ResurceBundle.t("button.search"));
+        jMenuItem1NuevoProducto.setText(ResurceBundle.t("button.newProduct"));
+        // Restablecer.setText(ResurceBundle.t("button.resetForm"));
+        //CIERE SESION
+        jMenuItem1CierreSesionItem.setText(ResurceBundle.t("button.logout"));
+        CierrreSesion.setText(ResurceBundle.t("menu.logout"));
+        //IDIOMA CAMBIAR
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));  // "Accesibilidad"
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
+        Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
+        Ingles.setText(ResurceBundle.t("language.english"));   // "English"
+
     }
 
+    /**
+     * Abre la ventana de resultados (CategoriaProducto) con la lista de productos
+     * proporcionada, cerrando la ventana principal.
+     *
+     * @param productos Lista de productos a mostrar.
+     * @param categoria true si se trata de una vista por categoría, false si es búsqueda.
+     */
     private void irSegunda(List<Producto> productos, boolean categoria) {
         if (productos == null) {
-            CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR);
+            CuadroDiologo.mostrarAviso(this, "No ha habido resuldatos", "No se ha podido abrir", JOptionPane.ERROR_MESSAGE);
             return;
         }
         this.dispose();  // CIERRA ACTUAL
+        System.out.println("irSegunda productos size = " + productos.size());
 
-        CategoriaProducto cat = new CategoriaProducto(user, productos, categoria);//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
+        CategoriaProducto cat = new CategoriaProducto(user, productos, categoria, ResurceBundle.getIdiomaActual());//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
         cat.setVisible(true);
         cat.setLocationRelativeTo(null);  // Centra en pantalla
     }
-
+  /**
+     * Rellena la tabla de la parte inferior con los 10 productos
+     * más cercanos a caducar para el usuario actual.
+     * Si no hay resultados, no modifica la tabla.
+     */
     private void actualizarTablaCaducidad() {
         listCaducidad = DaoProducto.buscarTop10PorCaducidad(user.getId());
         if (listCaducidad == null || listCaducidad.isEmpty()) {

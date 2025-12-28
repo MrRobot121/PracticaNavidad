@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Controlador.Controlador;
 import Dao.Daos.DaoCategoria;
 import Dao.Daos.DaoProducto;
 import Dao.Modelo.Categoria;
@@ -15,39 +16,58 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 
 /**
+ * Ventana para crear un nuevo producto en el inventario.
+ * Permite introducir nombre, cantidad, categoría, fecha de caducidad
+ * y si pertenece a la lista de la compra.
  *
  * @author HugoJB
  */
 public class NuevoProducto extends javax.swing.JFrame {
 
+    /**
+     * Usuario autenticado propietario del nuevo producto.
+     */
     private Usuarios user;
+
+    /**
+     * Selector de fecha para la fecha de caducidad del producto.
+     */
     private com.github.lgooddatepicker.components.DatePicker FechaPicker;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoProducto.class.getName());
 
     /**
-     * Creates new form NuevoProducto
+     * Crea el formulario de nuevo producto.
+     * Valida la existencia de usuario, aplica idioma,
+     * inicializa componentes y configura el DatePicker.
+     *
+     * @param user   Usuario autenticado. Si es null, se redirige a InicioSesion.
+     * @param idioma Código de idioma a aplicar (por ejemplo "es" o "en").
      */
-    public NuevoProducto(Usuarios user) {
+    public NuevoProducto(Usuarios user, String idioma) {
         this.user = user;//ANTES DE HACR NADA SI NO HAY USER NO FUNCIONA
 
         if (user == null) {
             CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
             this.dispose();
-            InicioSesion inicioSesion = new InicioSesion();
+            InicioSesion inicioSesion = new InicioSesion(idioma);
             inicioSesion.setVisible(true);
             return;
         }
         FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
 
-// Opcional: formato
+    // Opcional: formato
         FechaPicker.getSettings().setFormatForDatesCommonEra("dd/MM/yyyy");//PARA LA FECHA
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
-// o en tu panel principal:
-//panelPrincipal.setBackground(new Color(30, 30, 35));
+    // o en tu panel principal:
+    //panelPrincipal.setBackground(new Color(30, 30, 35));
 
-        ResurceBundle.setLocale(ResurceBundle.spanish);
+        ResurceBundle.setLocale(idioma);
         actualizarElementosIdioma();
+
+        //PARA LOS ENTER
+        Controlador.configurarEnter(CatageriaEditText, this::Guardar);//LAMA A ESTE METODO
     }
 
     /**
@@ -81,6 +101,10 @@ public class NuevoProducto extends javax.swing.JFrame {
         Restablecer = new javax.swing.JMenuItem();
         PonerListaCompra = new javax.swing.JMenu();
         chebos = new javax.swing.JCheckBoxMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +138,11 @@ public class NuevoProducto extends javax.swing.JFrame {
         jMenu1.setText("Ir a");
 
         jMenuItem2.setText("Menu");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
@@ -149,6 +178,30 @@ public class NuevoProducto extends javax.swing.JFrame {
         PonerListaCompra.add(chebos);
 
         jMenuBar1.add(PonerListaCompra);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
 
         setJMenuBar(jMenuBar1);
 
@@ -221,19 +274,30 @@ public class NuevoProducto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
         // TODO add your handling code here:
         restablecer();
     }//GEN-LAST:event_RestablecerActionPerformed
-    /**
+   /**
+     * Acción del botón principal "Guardar".
+     * Llama al método {@link #Guardar()} y, si devuelve true,
+     * finaliza la acción sin más.
      *
-     * @param evt
+     * @param evt Evento de acción del botón.
      */
     private void AddButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButonActionPerformed
         if (Guardar())
             return;
     }//GEN-LAST:event_AddButonActionPerformed
-
+    /**
+     * Realiza la validación de datos, construcción del objeto Producto
+     * y persistencia en base de datos.
+     *
+     * @return true si la operación termina correctamente o por validación,
+     *         false si hubo un error genérico tras capturar excepciones.
+     */
     private boolean Guardar() {
         // TODO add your handling code here:
         // Validar campos no vacíos
@@ -315,26 +379,61 @@ public class NuevoProducto extends javax.swing.JFrame {
         }
         return false;
     }
-
+  /**
+     * Acción del menú "Guardar".
+     * Reutiliza la lógica del botón principal llamando a {@link #Guardar()}.
+     *
+     * @param evt Evento de acción del elemento de menú.
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         Guardar();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    /**
+     * SOBRA
+     *
+     * @param evt
+     */
     private void chebosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chebosActionPerformed
         // TODO add your handling code here:
+
     }//GEN-LAST:event_chebosActionPerformed
+ /**
+     * Cambia el idioma de la interfaz a español y actualiza los textos.
+     *
+     * @param evt Evento del menú Español.
+     */
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_EspañolActionPerformed
+ /**
+     * Cambia el idioma de la interfaz a inglés y actualiza los textos.
+     *
+     * @param evt Evento del menú Inglés.
+     */
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_InglesActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Controlador.goPrincipal(this, user, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
-     */
+     *//*
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
+     */
+ /*      try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -347,16 +446,20 @@ public class NuevoProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new NuevoProducto(null).setVisible(true));
+ /*     java.awt.EventQueue.invokeLater(() -> new NuevoProducto(null).setVisible(true));
     }
-
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
     private javax.swing.JButton AddButon;
+    private javax.swing.JMenu CambioIdioma;
     private javax.swing.JTextPane CantidadEdit;
     private javax.swing.JLabel CantidadLabel;
     private javax.swing.JTextPane CatageriaEditText;
     private javax.swing.JLabel CatageriaLabel;
+    private javax.swing.JMenuItem Español;
     private javax.swing.JLabel FechaCaducidadLabel;
+    private javax.swing.JMenuItem Ingles;
     private javax.swing.JTextPane MininmoDesadoEdit;
     private javax.swing.JLabel MininmoDesadoLabel;
     private javax.swing.JTextPane NombreEd;
@@ -404,10 +507,19 @@ private void actualizarElementosIdioma() {
         Restablecer.setText(ResurceBundle.t("button.resetForm"));
         FechaCaducidadLabel.setText(ResurceBundle.t("label.dateExpiraton"));
         PonerListaCompra.setText(ResurceBundle.t("label.shoppingListTitle"));
+
+        //IDIOMA CAMBIAR
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));  // "Accesibilidad"
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
+        Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
+        Ingles.setText(ResurceBundle.t("language.english"));   // "English"
     }
 
-    /**
-     * Valida que los campos obligatorios no estén vacíos
+/**
+     * Valida que los campos obligatorios del formulario no estén vacíos
+     * y muestra mensajes de aviso en caso necesario.
+     *
+     * @return true si todos los campos son válidos, false en caso contrario.
      */
     private boolean validarFormulario() {
         if (NombreEd.getText().trim().isEmpty()) {
@@ -453,8 +565,12 @@ private void actualizarElementosIdioma() {
         return true;
     }
 
-    /**
-     * Obtiene una categoría por nombre o la crea si no existe
+  /**
+     * Obtiene una categoría por nombre desde la base de datos o la crea
+     * si no existe aún y la devuelve.
+     *
+     * @param nombre Nombre de la categoría a buscar o crear.
+     * @return Categoría existente o recién creada, nunca null.
      */
     private Categoria obtenerOCrearCategoria(String nombre) {
         Categoria categoria = DaoCategoria.getCategoriaForNombre(nombre);
@@ -470,8 +586,10 @@ private void actualizarElementosIdioma() {
         }
     }
 
+ 
     /**
-     * Restablece el formulario a valores por defecto
+     * Restablece el formulario a valores por defecto.
+     * Borra los campos, limpia la fecha y pone el foco en el nombre.
      */
     private void restablecer() {
         NombreEd.setText("");

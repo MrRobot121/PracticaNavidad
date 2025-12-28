@@ -21,33 +21,44 @@ import javax.swing.JOptionPane;
  */
 public class ListaCompra extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ListaCompra
+      /**
+     * Logger de la clase para registrar posibles incidencias.
      */
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaCompra.class.getName());
 
+    /**
+     * Usuario autenticado que está usando la ventana.
+     */
     private final Usuarios user;
+
+    /**
+     * Lista de productos que forman parte de la lista de la compra.
+     */
     private List<Producto> productosLista;
 
     /**
-     * Creates new form ListaCompra
+     * Constructor principal de la ventana de lista de compra.
+     * Valida el usuario, aplica el idioma, inicializa componentes y carga la tabla.
+     *
+     * @param user  Usuario autenticado. Si es null, se redirige a InicioSesion.
+     * @param idoma Código de idioma a aplicar (por ejemplo, "es" o "en").
      */
-    public ListaCompra(Usuarios user) {
+    public ListaCompra(Usuarios user, String idoma) {
         this.user = user;
 
         if (user == null) {
             CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
             this.dispose();
-            InicioSesion inicioSesion = new InicioSesion();
+            InicioSesion inicioSesion = new InicioSesion(idoma);
             inicioSesion.setVisible(true);
             return;
         }
 
-        ResurceBundle.setLocale(ResurceBundle.spanish);
+        ResurceBundle.setLocale(idoma);
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));
         actualizarElementosIdioma();
-        actualizarTabla();  // ← Llenar tabla al abrir
+        actualizarTabla();  
     }
 
     /**
@@ -64,6 +75,13 @@ public class ListaCompra extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new TableBonito();
         EliminarListaCompra = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,6 +151,44 @@ public class ListaCompra extends javax.swing.JFrame {
             }
         });
 
+        jMenu1.setText("Ir a");
+
+        jMenuItem2.setText("Menu");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -170,39 +226,57 @@ public class ListaCompra extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(VerProducto)
                     .addComponent(EliminarListaCompra))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * Acción del botón "Añadir".
+     * Incrementa en 1 la cantidad del producto seleccionado y refresca la tabla.
+     *
+     * @param evt Evento de acción asociado al botón.
+     */
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
-        // TODO add your handling code here:
-      Controlador.modifiacarCantidad(cogerElementoActual(), 1);
-      actualizarTabla();
+        Controlador.modifiacarCantidad(cogerElementoActual(), 1);
+        actualizarTabla();
 
     }//GEN-LAST:event_Añadir1ActionPerformed
-
+/**
+     * Acción del botón "Restar".
+     * Decrementa en 1 la cantidad del producto seleccionado y refresca la tabla.
+     *
+     * @param evt Evento de acción asociado al botón.
+     */
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
-        // TODO add your handling code here:
-        Controlador.modifiacarCantidad(cogerElementoActual(), -1);      actualizarTabla();
+        Controlador.modifiacarCantidad(cogerElementoActual(), -1);
+        actualizarTabla();
 
 
     }//GEN-LAST:event_Restar1ActionPerformed
-
+/**
+     * Acción del botón "Ver producto".
+     * Abre la ficha detallada del producto seleccionado (ProductoFicha).
+     *
+     * @param evt Evento de acción asociado al botón.
+     */
     private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
-        // TODO add your handling code here:
         Producto p = cogerElementoActual();
         if (p == null) {
             return;
 
         }
         this.dispose();
-        ProductoFicha pr = new ProductoFicha(p,user);
+        ProductoFicha pr = new ProductoFicha(p, user, ResurceBundle.getIdiomaActual());
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
     }//GEN-LAST:event_VerProductoActionPerformed
-
+ /**
+     * Acción del botón "Eliminar de lista".
+     * Quita el producto seleccionado de la lista de la compra y actualiza BD y tabla.
+     *
+     * @param evt Evento de acción asociado al botón.
+     */
     private void EliminarListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarListaCompraActionPerformed
         // TODO add your handling code here:
         Producto p = cogerElementoActual();
@@ -217,6 +291,36 @@ public class ListaCompra extends javax.swing.JFrame {
         dp.update(p);
         actualizarTabla();
     }//GEN-LAST:event_EliminarListaCompraActionPerformed
+ /**
+     * Cambia el idioma de la interfaz a español y actualiza los textos.
+     *
+     * @param evt Evento de acción del elemento de menú.
+     */
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_EspañolActionPerformed
+/**
+     * Cambia el idioma de la interfaz a inglés y actualiza los textos.
+     *
+     * @param evt Evento de acción del elemento de menú.
+     */
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_InglesActionPerformed
+
+    /**
+     * Vuelve a la ventana principal manteniendo el usuario e idioma actuales.
+     *
+     * @param evt Evento de acción del elemento de menú.
+     */
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Controlador.goPrincipal(this, user, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     /*
     /**
      * @param args the command line arguments
@@ -244,14 +348,25 @@ public class ListaCompra extends javax.swing.JFrame {
     }
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
     private javax.swing.JButton Añadir1;
+    private javax.swing.JMenu CambioIdioma;
     private javax.swing.JButton EliminarListaCompra;
+    private javax.swing.JMenuItem Español;
+    private javax.swing.JMenuItem Ingles;
     private javax.swing.JButton Restar1;
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton VerProducto;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    /**
+     * Actualiza todos los textos visibles de la ventana según el idioma actual.
+     * Afecta al título, botones y elementos del menú.
+     */
     private void actualizarElementosIdioma() {
         /* Titulo.setText(ResurceBundle.t("login.title"));
         UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
@@ -271,9 +386,21 @@ public class ListaCompra extends javax.swing.JFrame {
         Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
         VerProducto.setText(ResurceBundle.t("label.viewByProduct"));
         EliminarListaCompra.setText(ResurceBundle.t("button.deleteShoppingList"));
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+        //IDIOMA CAMBIAR
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));  // "Accesibilidad"
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
+        Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
+        Ingles.setText(ResurceBundle.t("language.english"));   // "English"
 
     }
-
+ /**
+     * Rellena la tabla con los productos de la lista de la compra.
+     * Si es necesario, primero carga la lista desde la base de datos.
+     * Muestra un aviso si no hay resultados.
+     */
     private void actualizarTabla() {
         if (productosLista == null || productosLista.isEmpty()) {//SI EXISTE TRABAJO CON LA ACTUAL AHORO CONSULTA BASE DATOS
             productosLista = DaoProducto.buscarProductosListaCompra(user.getId());
@@ -314,8 +441,6 @@ public class ListaCompra extends javax.swing.JFrame {
      * @param p
      * @param i LE SUMA A LA CANTIDAD SI ES NEGATIVO LOGICAMENTE LE RESTA
      */
-
-
     private Producto cogerElementoActual() {
         if (productosLista == null || productosLista.isEmpty()) {
             CuadroDiologo.mostrarAviso(
