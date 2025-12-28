@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Controlador.Controlador;
 import Dao.Daos.DaoProducto;
 import Dao.Modelo.Producto;
 import Dao.Modelo.Usuarios;
@@ -168,12 +169,12 @@ public class CategoriaProducto extends javax.swing.JFrame {
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
-        modifiacarCantidad(cogerElementoActual(), 1);
+        Controlador.modifiacarCantidad(cogerElementoActual(), 1); actualizarList();
     }//GEN-LAST:event_Añadir1ActionPerformed
 
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
         // TODO add your handling code here:
-        modifiacarCantidad(cogerElementoActual(), -1);
+           Controlador.modifiacarCantidad(cogerElementoActual(), -1);actualizarList();
 
     }//GEN-LAST:event_Restar1ActionPerformed
 
@@ -185,7 +186,7 @@ public class CategoriaProducto extends javax.swing.JFrame {
 
         }
         this.dispose();
-        ProductoFicha pr = new ProductoFicha(p);
+        ProductoFicha pr = new ProductoFicha(p,user);
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
     }//GEN-LAST:event_VerProductoActionPerformed
@@ -309,29 +310,5 @@ public class CategoriaProducto extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * ACtualiza la cantidad del producto
-     *
-     * @param p
-     * @param i LE SUMA A LA CANTIDAD SI ES NEGATIVO LOGIMENTE LE RESTA
-     */
-    private void modifiacarCantidad(Producto p, int i) {
-        if (p == null) {
-            return;
-        }
-
-        int nuevaCantidad = p.getCantidad() + i;
-        if (nuevaCantidad < 0) {
-            nuevaCantidad = 0;
-        }
-
-        p.setCantidad(nuevaCantidad);
-
-        // Guardar en BD
-        DaoProducto dao = new DaoProducto();
-        dao.update(p);
-
-        // Actualizar tabla
-        actualizarList();
-    }
+    
 }

@@ -17,7 +17,6 @@
        /
  */
 /**
- *@author HugoJB
  *@author MrRobot121
  *@version 1.0 
  *@see  
@@ -25,7 +24,6 @@
 package Dao.Modelo;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,12 +33,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -50,9 +46,9 @@ import java.util.Date;
     @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.id = :id"),
     @NamedQuery(name = "Producto.findByNombre", query = "SELECT p FROM Producto p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Producto.findByCantidad", query = "SELECT p FROM Producto p WHERE p.cantidad = :cantidad"),
-    @NamedQuery(name = "Producto.findByFechaCaducidad", query = "SELECT p FROM Producto p WHERE p.fechaCaducidad = :fechaCaducidad"),
     @NamedQuery(name = "Producto.findByCantidadMinDeseada", query = "SELECT p FROM Producto p WHERE p.cantidadMinDeseada = :cantidadMinDeseada"),
-    @NamedQuery(name = "Producto.findByListaCompra", query = "SELECT p FROM Producto p WHERE p.listaCompra = :listaCompra")})
+    @NamedQuery(name = "Producto.findByListaCompra", query = "SELECT p FROM Producto p WHERE p.listaCompra = :listaCompra"),
+    @NamedQuery(name = "Producto.findByFechaCaducidad", query = "SELECT p FROM Producto p WHERE p.fechaCaducidad = :fechaCaducidad")})
 public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -67,17 +63,15 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @Column(name = "cantidad")
     private int cantidad;
-    @Column(name = "fecha_caducidad")
-    @Temporal(TemporalType.DATE)
-    private Date fechaCaducidad;
     @Basic(optional = false)
     @Column(name = "cantidad_min_deseada")
     private int cantidadMinDeseada;
     @Basic(optional = false)
     @Column(name = "lista_compra")
     private boolean listaCompra;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
-    private Collection<ListaCompra> listaCompraCollection;
+    @Column(name = "fecha_caducidad")
+    @Temporal(TemporalType.DATE)
+    private Date fechaCaducidad;
     @JoinColumn(name = "id_categoria", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Categoria idCategoria;
@@ -124,14 +118,6 @@ public class Producto implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Date getFechaCaducidad() {
-        return fechaCaducidad;
-    }
-
-    public void setFechaCaducidad(Date fechaCaducidad) {
-        this.fechaCaducidad = fechaCaducidad;
-    }
-
     public int getCantidadMinDeseada() {
         return cantidadMinDeseada;
     }
@@ -148,12 +134,12 @@ public class Producto implements Serializable {
         this.listaCompra = listaCompra;
     }
 
-    public Collection<ListaCompra> getListaCompraCollection() {
-        return listaCompraCollection;
+    public Date getFechaCaducidad() {
+        return fechaCaducidad;
     }
 
-    public void setListaCompraCollection(Collection<ListaCompra> listaCompraCollection) {
-        this.listaCompraCollection = listaCompraCollection;
+    public void setFechaCaducidad(Date fechaCaducidad) {
+        this.fechaCaducidad = fechaCaducidad;
     }
 
     public Categoria getIdCategoria() {

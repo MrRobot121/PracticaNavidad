@@ -4,10 +4,15 @@
  */
 package Vista;
 
+import Dao.Daos.DaoCategoria;
+import Dao.Daos.DaoProducto;
+import Dao.Modelo.Categoria;
+import Dao.Modelo.Producto;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,6 +20,7 @@ import java.awt.Color;
  */
 public class NuevoProducto extends javax.swing.JFrame {
 
+    private Usuarios user;
     private com.github.lgooddatepicker.components.DatePicker FechaPicker;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NuevoProducto.class.getName());
 
@@ -22,6 +28,15 @@ public class NuevoProducto extends javax.swing.JFrame {
      * Creates new form NuevoProducto
      */
     public NuevoProducto(Usuarios user) {
+        this.user = user;//ANTES DE HACR NADA SI NO HAY USER NO FUNCIONA
+
+        if (user == null) {
+            CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            InicioSesion inicioSesion = new InicioSesion();
+            inicioSesion.setVisible(true);
+            return;
+        }
         FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
 
 // Opcional: formato
@@ -64,6 +79,8 @@ public class NuevoProducto extends javax.swing.JFrame {
         editar = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         Restablecer = new javax.swing.JMenuItem();
+        PonerListaCompra = new javax.swing.JMenu();
+        chebos = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,6 +121,11 @@ public class NuevoProducto extends javax.swing.JFrame {
         editar.setText("Editar");
 
         jMenuItem1.setText("Guardar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         editar.add(jMenuItem1);
 
         Restablecer.setText("Restablecer");
@@ -115,6 +137,18 @@ public class NuevoProducto extends javax.swing.JFrame {
         editar.add(Restablecer);
 
         jMenuBar1.add(editar);
+
+        PonerListaCompra.setText("lISTA COMPRA");
+
+        chebos.setSelected(true);
+        chebos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chebosActionPerformed(evt);
+            }
+        });
+        PonerListaCompra.add(chebos);
+
+        jMenuBar1.add(PonerListaCompra);
 
         setJMenuBar(jMenuBar1);
 
@@ -189,14 +223,107 @@ public class NuevoProducto extends javax.swing.JFrame {
 
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
         // TODO add your handling code here:
+        restablecer();
     }//GEN-LAST:event_RestablecerActionPerformed
-/**
- * 
- * @param evt 
- */
+    /**
+     *
+     * @param evt
+     */
     private void AddButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButonActionPerformed
-        // TODO add your handling code here:
+        if (Guardar())
+            return;
     }//GEN-LAST:event_AddButonActionPerformed
+
+    private boolean Guardar() {
+        // TODO add your handling code here:
+        // Validar campos no vacíos
+        if (!validarFormulario()) {
+            return true;
+        }
+        try {
+            // Obtener valores del formulario
+            String nombre = NombreEd.getText().trim();
+            int cantidad = Integer.parseInt(CantidadEdit.getText().trim());
+            int cantidadMin = Integer.parseInt(MininmoDesadoEdit.getText().trim());
+            String categoriaNombre = CatageriaEditText.getText().trim();
+            // Validar cantidad no negativa
+            if (cantidad < 0) {
+                CuadroDiologo.mostrarAviso(
+                        this,
+                        ResurceBundle.t("dialog.invalidQuantity.title"),
+                        ResurceBundle.t("dialog.invalidQuantity.message"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return true;
+            }
+            // Obtener categoría (crear si no existe)
+            Categoria categoria = obtenerOCrearCategoria(categoriaNombre);
+            if (categoria == null) {
+                CuadroDiologo.mostrarAviso(
+                        this,
+                        ResurceBundle.t("dialog.error.title"),
+                        ResurceBundle.t("dialog.categoryError.message"),
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return true;
+            }
+            // Obtener fecha de caducidad (si existe)
+            java.util.Date fechaCaducidad = null;
+            if (FechaPicker.getDate() != null) {
+                java.time.LocalDate ld = FechaPicker.getDate();
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.set(ld.getYear(), ld.getMonthValue() - 1, ld.getDayOfMonth());
+                fechaCaducidad = cal.getTime();
+            }
+            // Crear nuevo Producto
+            Producto nuevoProducto = new Producto();
+            nuevoProducto.setNombre(nombre);
+            nuevoProducto.setCantidad(cantidad);
+            nuevoProducto.setCantidadMinDeseada(cantidadMin);
+            nuevoProducto.setIdCategoria(categoria);
+            nuevoProducto.setFechaCaducidad(fechaCaducidad);
+            nuevoProducto.setListaCompra(false);  // Por defecto, no en lista de compra
+            nuevoProducto.setIdUser(user);  // Asignamos el usuario actual
+            nuevoProducto.setListaCompra(chebos.isSelected());
+            // Guardar en BD
+            DaoProducto dao = new DaoProducto();
+            dao.insert(nuevoProducto);
+            // Éxito: mostrar aviso y restablecer formulario
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.success.title"),
+                    ResurceBundle.t("dialog.productCreated.message"),
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            restablecer();//PARA METER OTRO USER
+            return true;
+        } catch (NumberFormatException ex) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.invalidInput.title"),
+                    ResurceBundle.t("dialog.invalidInput.message"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.error.title"),
+                    ResurceBundle.t("dialog.saveError.message"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+        return false;
+    }
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        Guardar();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void chebosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chebosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chebosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,8 +360,10 @@ public class NuevoProducto extends javax.swing.JFrame {
     private javax.swing.JTextPane MininmoDesadoEdit;
     private javax.swing.JLabel MininmoDesadoLabel;
     private javax.swing.JTextPane NombreEd;
+    private javax.swing.JMenu PonerListaCompra;
     private javax.swing.JMenuItem Restablecer;
     private javax.swing.JLabel Titulo;
+    private javax.swing.JCheckBoxMenuItem chebos;
     private javax.swing.JMenu editar;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -274,6 +403,83 @@ private void actualizarElementosIdioma() {
         jMenuItem1.setText(ResurceBundle.t("button.saveProduct"));
         Restablecer.setText(ResurceBundle.t("button.resetForm"));
         FechaCaducidadLabel.setText(ResurceBundle.t("label.dateExpiraton"));
+        PonerListaCompra.setText(ResurceBundle.t("label.shoppingListTitle"));
+    }
+
+    /**
+     * Valida que los campos obligatorios no estén vacíos
+     */
+    private boolean validarFormulario() {
+        if (NombreEd.getText().trim().isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.requiredField.title"),
+                    ResurceBundle.t("dialog.fieldName.message"),
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+
+        if (CantidadEdit.getText().trim().isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.requiredField.title"),
+                    ResurceBundle.t("dialog.fieldQuantity.message"),
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+
+        if (MininmoDesadoEdit.getText().trim().isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.requiredField.title"),
+                    ResurceBundle.t("dialog.fieldMinQuantity.message"),
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+
+        if (CatageriaEditText.getText().trim().isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.requiredField.title"),
+                    ResurceBundle.t("dialog.fieldCategory.message"),
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Obtiene una categoría por nombre o la crea si no existe
+     */
+    private Categoria obtenerOCrearCategoria(String nombre) {
+        Categoria categoria = DaoCategoria.getCategoriaForNombre(nombre);
+
+        if (categoria == null) {
+            // Crear nueva
+            categoria = new Categoria();
+            categoria.setNombre(nombre);
+            new DaoCategoria().insert(categoria);//LA crea 
+            return categoria;//La devuelve
+        } else {
+            return categoria;
+        }
+    }
+
+    /**
+     * Restablece el formulario a valores por defecto
+     */
+    private void restablecer() {
+        NombreEd.setText("");
+        CantidadEdit.setText("");
+        MininmoDesadoEdit.setText("");
+        CatageriaEditText.setText("");
+        FechaPicker.setDate(null);
+        NombreEd.requestFocus();
     }
 
 }

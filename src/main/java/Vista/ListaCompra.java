@@ -4,11 +4,16 @@
  */
 package Vista;
 
+import Controlador.Controlador;
+import Dao.Daos.DaoProducto;
+import Dao.Modelo.Producto;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
 import Recursos.*;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,19 +21,33 @@ import javax.swing.BorderFactory;
  */
 public class ListaCompra extends javax.swing.JFrame {
 
+    /**
+     * Creates new form ListaCompra
+     */
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ListaCompra.class.getName());
+
+    private final Usuarios user;
+    private List<Producto> productosLista;
 
     /**
      * Creates new form ListaCompra
      */
     public ListaCompra(Usuarios user) {
+        this.user = user;
+
+        if (user == null) {
+            CuadroDiologo.mostrarAviso(this, "Sin usuario no se puede ejecutar", "no se pude seguir", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+            InicioSesion inicioSesion = new InicioSesion();
+            inicioSesion.setVisible(true);
+            return;
+        }
+
         ResurceBundle.setLocale(ResurceBundle.spanish);
         initComponents();
-        getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
-// o en tu panel principal:
-//panelPrincipal.setBackground(new Color(30, 30, 35));
-
+        getContentPane().setBackground(new Color(30, 30, 35));
         actualizarElementosIdioma();
+        actualizarTabla();  // ← Llenar tabla al abrir
     }
 
     /**
@@ -159,30 +178,56 @@ public class ListaCompra extends javax.swing.JFrame {
 
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
+      Controlador.modifiacarCantidad(cogerElementoActual(), 1);
+      actualizarTabla();
+
     }//GEN-LAST:event_Añadir1ActionPerformed
 
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
         // TODO add your handling code here:
+        Controlador.modifiacarCantidad(cogerElementoActual(), -1);      actualizarTabla();
+
+
     }//GEN-LAST:event_Restar1ActionPerformed
 
     private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
         // TODO add your handling code here:
+        Producto p = cogerElementoActual();
+        if (p == null) {
+            return;
+
+        }
+        this.dispose();
+        ProductoFicha pr = new ProductoFicha(p,user);
+        pr.setVisible(true);
+        pr.setLocationRelativeTo(null);
     }//GEN-LAST:event_VerProductoActionPerformed
 
     private void EliminarListaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarListaCompraActionPerformed
         // TODO add your handling code here:
+        Producto p = cogerElementoActual();
+        if (p == null) {
+            return;
+
+        }
+        p.setListaCompra(false);//ES LO UNICO QUE MANTIENE EN LA LISTA
+        productosLista.remove(p);//Tambien esto xdd
+        //claro hay que ponerlo en la base
+        DaoProducto dp = new DaoProducto();
+        dp.update(p);
+        actualizarTabla();
     }//GEN-LAST:event_EliminarListaCompraActionPerformed
-/*
+    /*
     /**
      * @param args the command line arguments
      */
  /*   public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-   /*     try {
+     */
+ /*     try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -195,9 +240,9 @@ public class ListaCompra extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-   /*     java.awt.EventQueue.invokeLater(() -> new ListaCompra(user).setVisible(true));
+ /*     java.awt.EventQueue.invokeLater(() -> new ListaCompra(user).setVisible(true));
     }
-*/
+     */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Añadir1;
     private javax.swing.JButton EliminarListaCompra;
@@ -224,9 +269,77 @@ public class ListaCompra extends javax.swing.JFrame {
         Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
 
         Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
-        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));     
-                EliminarListaCompra.setText(ResurceBundle.t("button.deleteShoppingList"));     
-
+        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));
+        EliminarListaCompra.setText(ResurceBundle.t("button.deleteShoppingList"));
 
     }
+
+    private void actualizarTabla() {
+        if (productosLista == null || productosLista.isEmpty()) {//SI EXISTE TRABAJO CON LA ACTUAL AHORO CONSULTA BASE DATOS
+            productosLista = DaoProducto.buscarProductosListaCompra(user.getId());
+        }
+
+        if (productosLista == null || productosLista.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noResults.title"),
+                    ResurceBundle.t("dialog.noResults.message"),
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return;
+        }
+
+        javax.swing.table.DefaultTableModel modelo
+                = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+
+        for (Producto p : productosLista) {
+            String fechaTxt = "";
+            if (p.getFechaCaducidad() != null) {
+                fechaTxt = Fechas.formatearFecha(p.getFechaCaducidad());
+            }
+
+            modelo.addRow(new Object[]{
+                p.getNombre(),
+                p.getIdCategoria().getNombre(),
+                p.getCantidad(),
+                p.getCantidadMinDeseada()
+            });
+        }
+    }
+
+    /**
+     * ACtualiza la cantidad del producto
+     *
+     * @param p
+     * @param i LE SUMA A LA CANTIDAD SI ES NEGATIVO LOGICAMENTE LE RESTA
+     */
+
+
+    private Producto cogerElementoActual() {
+        if (productosLista == null || productosLista.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noProducts.title"), // "Error"
+                    ResurceBundle.t("dialog.noProducts.message"), // "No hay productos en la lista"
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return null;
+        }
+
+        int fila = jTable1.getSelectedRow();
+        if (fila == -1) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("dialog.noSelection.title"), // "Sin selección"
+                    ResurceBundle.t("dialog.noSelection.message"), // "Selecciona un producto de la tabla"
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            return null;
+        }
+
+        int filaModelo = jTable1.convertRowIndexToModel(fila);
+        return productosLista.get(filaModelo);
+    }
+
 }

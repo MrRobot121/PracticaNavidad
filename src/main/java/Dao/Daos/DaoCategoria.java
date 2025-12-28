@@ -116,4 +116,19 @@ public static List<Categoria> buscarCategoriasDeUsuario(int userId) {
     }
 }
 
+    public static Categoria getCategoriaForNombre(String nombre) {
+          try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+        // Buscar si existe
+        Categoria categoria = session.createQuery(
+                "FROM Categoria c WHERE c.nombre = :nombre",
+                Categoria.class
+        )
+        .setParameter("nombre", nombre)
+        .uniqueResult();
+
+     
+            return categoria;  
+        }        
+    }
+
 }
