@@ -18,7 +18,6 @@ package Dao.Daos;
         /
        /
  */
-
 import Dao.Modelo.Usuarios;
 import Dao.Util.HibernateUtil;
 import Recursos.GestorContraseñas;
@@ -30,14 +29,17 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-
 /**
  * @author MrRobot121
- * @author Hugo JB
  * @version 1.0 ---------------------------------
- * @see
+ *
  */
-
+/**
+ * DAO para operaciones CRUD de entidades {@link Usuarios}. Incluye métodos específicos de autenticación y validación de usuarios con gestión segura de contraseñas mediante {@link GestorContraseñas}.
+ *
+ * @author HugoJB
+ * @see DaoInterface
+ */
 public class DaoUser implements DaoInterface<Usuarios> {
 
     /**
@@ -89,8 +91,8 @@ public class DaoUser implements DaoInterface<Usuarios> {
     public static boolean existeUsuarioONombre(String nombreUser, String email) {
         try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery(
-                            "SELECT COUNT(u) FROM Usuarios u WHERE u.nombreUser = :user OR u.email = :email",
-                            Long.class)
+                    "SELECT COUNT(u) FROM Usuarios u WHERE u.nombreUser = :user OR u.email = :email",
+                    Long.class)
                     .setParameter("user", nombreUser)
                     .setParameter("email", email)
                     .uniqueResult();
@@ -115,8 +117,6 @@ public class DaoUser implements DaoInterface<Usuarios> {
             return false;
         }
     }
-
-    // ================== IMPLEMENTACIÓN DE DaoInterface ==================
 
     /**
      * Inserta un nuevo registro en la base de datos.
@@ -190,5 +190,3 @@ public class DaoUser implements DaoInterface<Usuarios> {
         }
     }
 }
-
-

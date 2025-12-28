@@ -18,8 +18,8 @@
  */
 /**
  *@author MrRobot121
- *@version 1.0 
- *@see  
+ * @version 1.0
+ * @see
  */
 package Dao.Daos;
 
@@ -30,7 +30,8 @@ import java.util.Date;
 
 import java.util.List;
 
-public class DaoProducto implements DaoInterface<Producto>{
+public class DaoProducto implements DaoInterface<Producto> {
+
     /**
      * Inserta un nuevo registro en la base de datos.
      *
@@ -93,7 +94,7 @@ public class DaoProducto implements DaoInterface<Producto>{
      * @param id identificador del registro a eliminar
      */
     @Override
-    public  void delete(int id) {
+    public void delete(int id) {
         try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
             Producto p = session.get(Producto.class, id);
@@ -104,8 +105,6 @@ public class DaoProducto implements DaoInterface<Producto>{
         }
     }
 
-    // ================== MÉTODOS EXTRA PARA TUS BÚSQUEDAS ==================
-
     /**
      * Devuelve todos los productos asociados a un usuario concreto.
      *
@@ -115,108 +114,117 @@ public class DaoProducto implements DaoInterface<Producto>{
     public static List<Producto> buscarPorUsuario(int userId) {
         try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "FROM Producto p WHERE p.usuarios.id = :userId",
+                    "FROM Producto p WHERE p.idUser.id = :userId",
                     Producto.class
             )
-            .setParameter("userId", userId)
-            .getResultList();
+                    .setParameter("userId", userId)
+                    .getResultList();
         }
     }
 
     /**
      * Busca productos por nombre (prefijo) asociados a un usuario concreto.
      *
-     * @param texto  prefijo del nombre del producto a buscar
+     * @param texto prefijo del nombre del producto a buscar
      * @param userId id del usuario propietario de los productos
      * @return lista de productos que coinciden con el criterio
      */
     public static List<Producto> buscarPorNombreYUsuario(String texto, int userId) {
         try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "FROM Producto p " +
-                    "WHERE p.usuarios.id = :userId " +
-                    "AND LOWER(p.nombre) LIKE :nombre",
+                    "FROM Producto p "
+                    + "WHERE p.idUser.id = :userId "
+                    + "AND LOWER(p.nombre) LIKE :nombre",
                     Producto.class
             )
-            .setParameter("userId", userId)
-            .setParameter("nombre", texto.toLowerCase() + "%")
-            .getResultList();
+                    .setParameter("userId", userId)
+                    .setParameter("nombre", texto.toLowerCase() + "%")
+                    .getResultList();
         }
     }
-    
+
     /**
- * Devuelve hasta 10 productos más antiguos por fecha de caducidad para un usuario.
- * Si hay caducados, devuelve 10 caducados más antiguos.
- * Si no hay caducados, devuelve 10 más próximos a caducar.
- */
-public static List<Producto> buscarTop10PorCaducidad(int userId) {
-    try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
+     * Devuelve hasta 10 productos más antiguos por fecha de caducidad para un usuario. Si hay caducados, devuelve 10 caducados más antiguos. Si no hay caducados, devuelve 10 más próximos a caducar.
+     *
+     * @param userId ID del usuario.
+     * @return Lista de máximo 10 productos urgentes por caducidad.
+     */
+    public static List<Producto> buscarTop10PorCaducidad(int userId) {
+        try (org.hibernate.Session session = Dao.Util.HibernateUtil.getSessionFactory().openSession()) {
 
-        // Traemos todos los productos del usuario con fecha de caducidad, ordenados
-        List<Producto> todos = session.createQuery(
-                "FROM Producto p " +
-                "WHERE p.usuarios.id = :userId AND p.fechaCaducidad IS NOT NULL " +
-                "ORDER BY p.fechaCaducidad ASC",
-                Producto.class
-        )
-        .setParameter("userId", userId)
-        .getResultList();
+            // Traemos todos los productos del usuario con fecha de caducidad, ordenados
+            List<Producto> todos = session.createQuery(
+                    "FROM Producto p "
+                    + "WHERE p.idUser.id = :userId AND p.fechaCaducidad IS NOT NULL "
+                    + "ORDER BY p.fechaCaducidad ASC",
+                    Producto.class
+            )
+                    .setParameter("userId", userId)
+                    .getResultList();
 
-        if (todos.isEmpty()) {
-            return todos; // no hay productos con fecha
+            if (todos.isEmpty()) {
+                return todos; // no hay productos con fecha
+            }
+
+            // Caducados (fecha < hoy)
+            List<Producto> caducados = new java.util.ArrayList<>();
+            Date hoy = new Date();
+
+            for (Producto p : todos) {
+                Date fecha = p.getFechaCaducidad();
+                if (fecha.before(hoy)) {     // fecha < hoy
+                    caducados.add(p);
+                }
+            }
+
+            if (!caducados.isEmpty()) {
+                return caducados.size() > 10 ? caducados.subList(0, 10) : caducados;
+            }
+
+            // Si no hay caducados, devolvemos los 10 más próximos (los primeros de la lista ordenada)
+            return todos.size() > 10 ? todos.subList(0, 10) : todos;
         }
-
-
-        // Caducados (fecha < hoy)
-        List<Producto> caducados = new java.util.ArrayList<>();
- Date hoy = new Date();
-
-for (Producto p : todos) {
-    Date fecha = p.getFechaCaducidad();
-    if (fecha.before(hoy)) {     // fecha < hoy
-        caducados.add(p);
     }
-}
 
-        if (!caducados.isEmpty()) {
-            return caducados.size() > 10 ? caducados.subList(0, 10) : caducados;
+    /**
+     * Busca productos de una categoría específica para un usuario.
+     *
+     * @param idCategoria ID de la categoría.
+     * @param userId ID del usuario propietario.
+     * @return Productos que coinciden con categoría y usuario.
+     */
+    public static List<Producto> buscarPorCategoriaYUsuario(int idCategoria, int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM Producto p "
+                    + "WHERE p.idUser.id = :userId AND p.idCategoria.id = :idCategoria",
+                    Producto.class
+            )
+                    .setParameter("userId", userId)
+                    .setParameter("idCategoria", idCategoria)
+                    .getResultList();
         }
+    }
 
-        // Si no hay caducados, devolvemos los 10 más próximos (los primeros de la lista ordenada)
-        return todos.size() > 10 ? todos.subList(0, 10) : todos;
+    /**
+     * DEVUELVE LOS ELEMENTOS QUE ESTEN TENGAN LISTA COMPRA TRUE Y que EL ID USER SEA userDI Obtiene productos para la lista de compra automática: - Marcados para lista de compra (listaCompra = true) - Con stock bajo (cantidad < cantidadMinDeseada) - Ordenados alfabéticamente por nombre
+     *
+     * @param userId ID del usuario.
+     * @return Productos urgentes para reponer, listos para compra.
+     */
+    public static List<Producto> buscarProductosListaCompra(int userId) {
+        try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM Producto p "
+                    + "WHERE p.idUser.id = :userId "
+                    + "AND p.listaCompra = true "
+                    + "AND p.cantidad < p.cantidadMinDeseada "
+                    + "ORDER BY p.nombre",
+                    Producto.class
+            )
+                    .setParameter("userId", userId)
+                    .getResultList();
+        }
     }
-}
-public static List<Producto> buscarPorCategoriaYUsuario(int idCategoria, int userId) {
-    try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-        return session.createQuery(
-                "FROM Producto p " +
-                "WHERE p.idUser.id = :userId AND p.idCategoria.id = :idCategoria",
-                Producto.class
-        )
-        .setParameter("userId", userId)
-        .setParameter("idCategoria", idCategoria)
-        .getResultList();
-    }
-}
-/**
- * DEVUELVE LOS ELEMENTOS QUE ESTEN TENGAN LISTA COMPRA TRUE Y que EL ID USER SEA userDI
- * @param userId
- * @return 
- */
-public static List<Producto> buscarProductosListaCompra(int userId) {
-    try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
-        return session.createQuery(
-                "FROM Producto p " +
-                "WHERE p.idUser.id = :userId " +
-                "AND p.listaCompra = true " +
-                "AND p.cantidad < p.cantidadMinDeseada " +
-                "ORDER BY p.nombre",
-                Producto.class
-        )
-        .setParameter("userId", userId)
-        .getResultList();
-    }
-}
-
 
 }

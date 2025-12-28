@@ -4,6 +4,7 @@
  */
 package Vista;
 
+import Dao.Daos.DaoLogs;
 import Dao.Daos.DaoUser;
 import Dao.Modelo.Usuarios;
 import Recursos.ElementosPersonalizados.*;
@@ -16,20 +17,23 @@ import javax.swing.JOptionPane;
  * @author HugoJB
  */
 public class InicioSesion extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InicioSesion.class.getName());
 
     /**
-     * Creates new form InicioSesion
+     * Crea el formulario de inicio de sesión. Aplica el idioma, configura colores y el Enter en el campo contraseña.
+     *
+     * @param idioma Código de idioma a aplicar (por ejemplo "es" o "en").
      */
-    public InicioSesion() {
+    public InicioSesion(String idioma) {
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
 //panelPrincipal.setBackground(new Color(30, 30, 35));
+        ResurceBundle.setLocale(idioma);
 
-        ResurceBundle.setLocale(ResurceBundle.spanish);
         actualizarElementosIdioma();
+        Controlador.Controlador.configurarEnter(passwordPane, this::siguiente);
     }
 
     /**
@@ -49,6 +53,15 @@ public class InicioSesion extends javax.swing.JFrame {
         Enviar = new BotonBonito("");
         recuperarContrasenaBotton = new BotonBonito("");
         nuevoUsuario = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        ExitOption = new javax.swing.JMenuItem();
+        Editar = new javax.swing.JMenu();
+        Restablecer = new javax.swing.JMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -82,6 +95,57 @@ public class InicioSesion extends javax.swing.JFrame {
                 nuevoUsuarioActionPerformed(evt);
             }
         });
+
+        jMenu1.setText("Ir a");
+
+        ExitOption.setText("Exit");
+        ExitOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExitOptionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ExitOption);
+
+        jMenuBar1.add(jMenu1);
+
+        Editar.setText("Editar");
+
+        Restablecer.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.META_DOWN_MASK));
+        Restablecer.setText("Rescatblecer");
+        Restablecer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestablecerActionPerformed(evt);
+            }
+        });
+        Editar.add(Restablecer);
+
+        jMenuBar1.add(Editar);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,79 +187,140 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addComponent(recuperarContrasenaBotton)
                 .addGap(18, 18, 18)
                 .addComponent(nuevoUsuario)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+ /**
+     * Acción del botón Enviar. Delegada al método {@link #siguiente()} para reutilizar lógica.
+     *
+     * @param evt Evento de acción del botón.
+     */
     private void EnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarActionPerformed
+        siguiente();
+
+
+    }//GEN-LAST:event_EnviarActionPerformed
+    /**
+     * Lógica principal de inicio de sesión. Valida campos, consulta usuario en BD y, si es correcto, abre la ventana principal.
+     */
+    public void siguiente() {
         // TODO add your handling code here:
         String nombreString = userPane.getText().trim();
-    String contrasenia = passwordPane.getText().trim();
+        String contrasenia = passwordPane.getText().trim();
 
-    if (nombreString.isEmpty()) {
-        CuadroDiologo.mostrarAviso(
-            this,
-            ResurceBundle.t("login.title"),
-            ResurceBundle.t("error.login.userRequired"),
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
+        if (nombreString.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("login.title"),
+                    ResurceBundle.t("error.login.userRequired"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        if (contrasenia.isEmpty()) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("login.title"),
+                    ResurceBundle.t("error.login.passwordRequired"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+        //YA TENGO TODO
+
+        Usuarios usuario = DaoUser.buscarPorCredenciales(nombreString, contrasenia);
+
+        if (usuario == null) {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("login.title"),
+                    ResurceBundle.t("error.login.credentials"),
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } else {
+            CuadroDiologo.mostrarAviso(
+                    this,
+                    ResurceBundle.t("login.welcome.title"),
+                    ResurceBundle.t("login.welcome.message") + " " + usuario.getNombre(),
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            DaoLogs.registrarInicio(usuario);//LO REGISTRA EL LOG
+            this.dispose();
+            // MENU PRINCIPAL CON USER NOT NULL
+            Principal principal = new Principal(usuario, ResurceBundle.getIdiomaActual());
+            principal.setVisible(true);
+        }
     }
-
-    if (contrasenia.isEmpty()) {
-        CuadroDiologo.mostrarAviso(
-            this,
-            ResurceBundle.t("login.title"),
-            ResurceBundle.t("error.login.passwordRequired"),
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
-    //YA TENGO TODO
-    
-    Usuarios usuario = DaoUser.buscarPorCredenciales(nombreString, contrasenia);
-
-    if (usuario == null) {
-        CuadroDiologo.mostrarAviso(
-            this, 
-            ResurceBundle.t("login.title"), 
-            ResurceBundle.t("error.login.credentials"), 
-            JOptionPane.ERROR_MESSAGE
-        );
-    } else {
-        CuadroDiologo.mostrarAviso(
-            this, 
-            ResurceBundle.t("login.welcome.title"), 
-            ResurceBundle.t("login.welcome.message")+" "+ usuario.getNombre(), 
-            JOptionPane.INFORMATION_MESSAGE
-        );
-        this.dispose();
-        // MENU PRINCIPAL CON USER NOT NULL
-        Principal principal=new Principal(usuario);
-        principal.setVisible(true);
-    }
-
-        
-    }//GEN-LAST:event_EnviarActionPerformed
-
+     /**
+     * Abre la ventana de recuperación de contraseña.
+     *
+     * @param evt Evento del botón "Recuperar contraseña".
+     */
     private void recuperarContrasenaBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarContrasenaBottonActionPerformed
         // TODO add your handling code here:
-    this.dispose();  // CIERRA ACTUAL
-    
-    RecuperarContraseña recuperarFrame = new RecuperarContraseña();
-    recuperarFrame.setVisible(true);
-    recuperarFrame.setLocationRelativeTo(null);  // Centra en pantalla
+        this.dispose();  // CIERRA ACTUAL
+
+        RecuperarContraseña recuperarFrame = new RecuperarContraseña(ResurceBundle.getIdiomaActual());
+        recuperarFrame.setVisible(true);
+        recuperarFrame.setLocationRelativeTo(null);  // Centra en pantalla
 
     }//GEN-LAST:event_recuperarContrasenaBottonActionPerformed
 
+        /**
+     * Abre el diálogo de registro de nuevo usuario.
+     *
+     * @param evt Evento del botón "Nuevo usuario".
+     */
+
     private void nuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoUsuarioActionPerformed
         // TODO add your handling code here:
-             RegistroDialog dialog = new RegistroDialog(this, true);
-    dialog.setVisible(true);
+        RegistroDialog dialog = new RegistroDialog(this, true);
+        dialog.setVisible(true);
 
     }//GEN-LAST:event_nuevoUsuarioActionPerformed
+/**
+     * Cierra la aplicación cuando se pulsa la opción de salida.
+     *
+     * @param evt Evento del elemento de menú "Exit".
+     */
+    private void ExitOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitOptionActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);//SALE DEL PROGAMA
+    }//GEN-LAST:event_ExitOptionActionPerformed
+/**
+     * Restablece los campos del formulario de login.
+     *
+     * @param evt Evento del elemento de menú "Restablecer".
+     */
+    private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
+        // TODO add your handling code here:
+        restablecerFormulario();
+    }//GEN-LAST:event_RestablecerActionPerformed
+  /**
+     * Cambia el idioma a español y actualiza los textos.
+     *
+     * @param evt Evento del menú Español.
+     */
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+        System.out.println("patata");
+    }//GEN-LAST:event_EspañolActionPerformed
+/**
+     * Cambia el idioma a inglés y actualiza los textos.
+     *
+     * @param evt Evento del menú Inglés.
+     */
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+        //  System.out.println("patata inglesa"+ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_InglesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,13 +344,22 @@ public class InicioSesion extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new InicioSesion().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new InicioSesion(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
+    private javax.swing.JMenu CambioIdioma;
+    private javax.swing.JMenu Editar;
     private javax.swing.JButton Enviar;
+    private javax.swing.JMenuItem Español;
+    private javax.swing.JMenuItem ExitOption;
+    private javax.swing.JMenuItem Ingles;
+    private javax.swing.JMenuItem Restablecer;
     private javax.swing.JLabel Titulo;
     private javax.swing.JLabel UserLabel;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton nuevoUsuario;
@@ -236,13 +370,33 @@ public class InicioSesion extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void actualizarElementosIdioma() {
+        // Componentes principales
         Titulo.setText(ResurceBundle.t("login.title"));
         UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
         userPane.setToolTipText(ResurceBundle.t("tooltip.userOrEmail"));
-        password.setText(ResurceBundle.t("label.password"));        
+        password.setText(ResurceBundle.t("label.password"));
         passwordPane.setToolTipText(ResurceBundle.t("tooltip.password"));
         Enviar.setText(ResurceBundle.t("button.next"));
         recuperarContrasenaBotton.setText(ResurceBundle.t("button.recoverPassword"));
         nuevoUsuario.setText(ResurceBundle.t("button.newUser"));
+
+        // MENÚS - TODOS los componentes del menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        ExitOption.setText(ResurceBundle.t("menuItem.exit"));
+        Editar.setText(ResurceBundle.t("menu.edit"));
+        Restablecer.setText(ResurceBundle.t("button.resetForm"));
+
+        // ACCESIBILIDAD E IDIOMA - AQUÍ ESTABA EL PROBLEMA
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));
+        Español.setText(ResurceBundle.t("language.spanish"));
+        Ingles.setText(ResurceBundle.t("language.english"));
     }
+
+    private void restablecerFormulario() {
+        userPane.setText("");
+        passwordPane.setText("");
+        userPane.requestFocus();  // Pone el cursor en el campo usuario
+    }
+
 }

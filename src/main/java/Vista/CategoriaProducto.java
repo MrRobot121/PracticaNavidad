@@ -17,7 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 
 /**
- * FALTA IMPLEMNTAR
+ * Pantalla de visualización y gestión de productos por categoría o resultados de búsqueda. Permite al usuario ver productos en tabla, aumentar/disminuir cantidad y acceder a detalles.
  *
  * @author HugoJB
  */
@@ -30,11 +30,16 @@ public class CategoriaProducto extends javax.swing.JFrame {
     Boolean cat;
 
     /**
-     * Creates new form CategoriaProducto
+     * Constructor que inicializa la ventana de categoría de productos. Valida que el usuario no sea nulo, configura idioma y rellena la tabla.
+     *
+     * @param user Usuario autenticado (requerido, si es null redirige a login)
+     * @param productosm Lista de productos a mostrar en la tabla
+     * @param categoria true si muestra categoría, false si muestra resultados de búsqueda
+     * @param idioma Código de idioma (ej: "es", "en") para localización
      */
-    public CategoriaProducto(Usuarios user, List<Producto> productosm, Boolean categoria) {
+    public CategoriaProducto(Usuarios user, List<Producto> productosm, Boolean categoria, String idioma) {
+
         //  FechaPicker = new com.github.lgooddatepicker.components.DatePicker();
-        ResurceBundle.setLocale(ResurceBundle.spanish);
         initComponents();
         getContentPane().setBackground(new Color(30, 30, 35));   // en el JFrame
 // o en tu panel principal:
@@ -46,12 +51,14 @@ public class CategoriaProducto extends javax.swing.JFrame {
             //System.exit(1); //ME CARGO EL PROGAMA 
             //MEJOR ME VOY AL LOGIN
             this.dispose();
-            InicioSesion inicioSesion = new InicioSesion();
+            InicioSesion inicioSesion = new InicioSesion(idioma);
             inicioSesion.setVisible(true);//VA INICIO SESION
             //  System.exit(0);
             return;
         }
-        this.productos = productos;
+        ResurceBundle.setLocale(idioma);
+
+        this.productos = productosm;
         this.cat = categoria;
         actualizarElementosIdioma();
         actualizarList();
@@ -70,6 +77,15 @@ public class CategoriaProducto extends javax.swing.JFrame {
         Añadir1 = new BotonBonito("");
         Restar1 = new BotonBonito("");
         VerProducto = new BotonBonito("");
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        Acesebilidad = new javax.swing.JMenu();
+        CambioIdioma = new javax.swing.JMenu();
+        Español = new javax.swing.JMenuItem();
+        Ingles = new javax.swing.JMenuItem();
+        Editar = new javax.swing.JMenu();
+        jMenuItem1Buscar = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -132,6 +148,57 @@ public class CategoriaProducto extends javax.swing.JFrame {
             }
         });
 
+        jMenu1.setText("Ir a");
+
+        jMenuItem2.setText("Menu");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        Acesebilidad.setText("Acesibilidad");
+
+        CambioIdioma.setText("jMenu2");
+
+        Español.setText("jMenuItem1");
+        Español.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EspañolActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Español);
+
+        Ingles.setText("jMenuItem2");
+        Ingles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InglesActionPerformed(evt);
+            }
+        });
+        CambioIdioma.add(Ingles);
+
+        Acesebilidad.add(CambioIdioma);
+
+        jMenuBar1.add(Acesebilidad);
+
+        Editar.setText("Editar");
+
+        jMenuItem1Buscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_DOWN_MASK | java.awt.event.InputEvent.META_DOWN_MASK));
+        jMenuItem1Buscar.setText("NuevoProducto");
+        jMenuItem1Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1BuscarActionPerformed(evt);
+            }
+        });
+        Editar.add(jMenuItem1Buscar);
+
+        jMenuBar1.add(Editar);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,23 +228,37 @@ public class CategoriaProducto extends javax.swing.JFrame {
                     .addComponent(Restar1))
                 .addGap(18, 18, 18)
                 .addComponent(VerProducto)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Acción al pulsar botón "Añadir". Incrementa la cantidad del producto seleccionado en 1 y actualiza la tabla.
+     *
+     * @param evt Evento de acción del botón
+     */
     private void Añadir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Añadir1ActionPerformed
         // TODO add your handling code here:
-        Controlador.modifiacarCantidad(cogerElementoActual(), 1); actualizarList();
+        Controlador.modifiacarCantidad(cogerElementoActual(), 1);
+        actualizarList();
     }//GEN-LAST:event_Añadir1ActionPerformed
-
+    /**
+     * Acción al pulsar botón "Restar". Decrementa la cantidad del producto seleccionado en 1 y actualiza la tabla.
+     *
+     * @param evt Evento de acción del botón
+     */
     private void Restar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Restar1ActionPerformed
         // TODO add your handling code here:
-           Controlador.modifiacarCantidad(cogerElementoActual(), -1);actualizarList();
+        Controlador.modifiacarCantidad(cogerElementoActual(), -1);
+        actualizarList();
 
     }//GEN-LAST:event_Restar1ActionPerformed
-
+    /**
+     * Acción al seleccionar idioma Español en el menú. Cambia el locale a español y actualiza todos los textos de la UI.
+     *
+     * @param evt Evento de acción del menú
+     */
     private void VerProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductoActionPerformed
         // TODO add your handling code here:
         Producto p = cogerElementoActual();
@@ -186,10 +267,53 @@ public class CategoriaProducto extends javax.swing.JFrame {
 
         }
         this.dispose();
-        ProductoFicha pr = new ProductoFicha(p,user);
+        ProductoFicha pr = new ProductoFicha(p, user, ResurceBundle.getIdiomaActual());
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
     }//GEN-LAST:event_VerProductoActionPerformed
+    /**
+     * Acción al seleccionar idioma Español en el menú. Cambia el locale a español y actualiza todos los textos de la UI.
+     *
+     * @param evt Evento de acción del menú
+     */
+    private void EspañolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EspañolActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.spanish);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_EspañolActionPerformed
+    /**
+     * Acción al seleccionar idioma Inglés en el menú. Cambia el locale a inglés y actualiza todos los textos de la UI.
+     *
+     * @param evt Evento de acción del menú
+     */
+    private void InglesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InglesActionPerformed
+        // TODO add your handling code here:
+        ResurceBundle.setLocale(ResurceBundle.english);
+        actualizarElementosIdioma();
+    }//GEN-LAST:event_InglesActionPerformed
+    /**
+     * Acción al seleccionar "Ir a Menú". Cierra esta ventana y abre la pantalla principal.
+     *
+     * @param evt Evento de acción del menú
+     */
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Controlador.goPrincipal(this, user, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    /**
+     * Acción al seleccionar "Nuevo Producto". Abre la ventana para crear un nuevo producto.
+     *
+     * @param evt Evento de acción del menú
+     */
+    private void jMenuItem1BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1BuscarActionPerformed
+        // TODO add your handling code here:
+        Controlador.goNuevoProducto(this, user, ResurceBundle.getIdiomaActual());
+    }//GEN-LAST:event_jMenuItem1BuscarActionPerformed
+    /**
+     * Obtiene el producto seleccionado en la tabla. Valida que la lista no esté vacía y que haya una fila seleccionada.
+     *
+     * @return Producto seleccionado, o null si no hay selección válida
+     */
     private Producto cogerElementoActual() {
         if (productos == null || productos.isEmpty()) {
             CuadroDiologo.mostrarAviso(
@@ -238,17 +362,30 @@ public class CategoriaProducto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null, false).setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new CategoriaProducto(null, null, false, null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu Acesebilidad;
     private javax.swing.JButton Añadir1;
+    private javax.swing.JMenu CambioIdioma;
+    private javax.swing.JMenu Editar;
+    private javax.swing.JMenuItem Español;
+    private javax.swing.JMenuItem Ingles;
     private javax.swing.JButton Restar1;
     private javax.swing.JLabel Titulo;
     private javax.swing.JButton VerProducto;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1Buscar;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    /**
+     * Actualiza los textos de los elementos de la UI según el idioma actual.
+     * Se llama cuando cambia el idioma o al inicializar la ventana.
+     */
     private void actualizarElementosIdioma() {
         /* Titulo.setText(ResurceBundle.t("login.title"));
         UserLabel.setText(ResurceBundle.t("label.userOrEmail"));
@@ -271,15 +408,26 @@ public class CategoriaProducto extends javax.swing.JFrame {
         Añadir1.setText(ResurceBundle.t("button.add"));                  // Añadir
 
         Restar1.setText(ResurceBundle.t("button.decreaseQuantity"));
-        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));                  // Añadir
-
+        VerProducto.setText(ResurceBundle.t("label.viewByProduct"));
+        // Menú
+        jMenu1.setText(ResurceBundle.t("menu.navigation"));
+        jMenuItem2.setText(ResurceBundle.t("menuItem.goToMenu"));
+        //IDIOMA CAMBIAR
+        Acesebilidad.setText(ResurceBundle.t("menu.accessibility"));  // "Accesibilidad"
+        CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
+        Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
+        Ingles.setText(ResurceBundle.t("language.english"));   // "English"
+//EDIT
+        Editar.setText(ResurceBundle.t("menu.edit"));
+        jMenuItem1Buscar.setText(ResurceBundle.t("button.newProduct"));
     }
-
+    /**
+     * Actualiza el contenido de la tabla con los productos de la lista actual.
+     * Limpia la tabla anterior, valida que haya productos y llena las filas.
+     * Cada fila contiene: Nombre, Categoría, Cantidad, Cantidad Mínima, Fecha Caducidad.
+     */
     private void actualizarList() {
-        if (productos == null || productos.isEmpty()) {
-            CuadroDiologo.mostrarAviso(this, "Error", "No hay elementos que mostrar vuelve a la pantalla princiapal", JOptionPane.ERROR);
-            return;
-        }
+
         if (productos == null || productos.isEmpty()) {
             CuadroDiologo.mostrarAviso(
                     this,
@@ -310,5 +458,4 @@ public class CategoriaProducto extends javax.swing.JFrame {
         }
     }
 
-    
 }

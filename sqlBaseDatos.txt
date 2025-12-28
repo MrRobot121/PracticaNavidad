@@ -25,14 +25,8 @@ CREATE TABLE  if NOT EXISTS  producto (
         FOREIGN KEY (id_user) REFERENCES usuarios(id),
     CONSTRAINT fk_producto_categoria
         FOREIGN KEY (id_categoria) REFERENCES categoria(id)
-);/* IGNORAR MEJOR ELIMINAR
-CREATE TABLE  if NOT EXISTS  lista_compra (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    id_producto INT NOT NULL,
-    CONSTRAINT fk_lista_producto
-        FOREIGN KEY (id_producto) REFERENCES producto(id)
-        ON DELETE CASCADE
-);*/
+);
+
 CREATE TABLE  if NOT EXISTS  registro_inicio (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     inicio_sesion DATETIME NOT NULL,
