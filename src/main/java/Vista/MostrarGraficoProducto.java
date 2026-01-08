@@ -56,6 +56,7 @@ String idioma;
      CuadroDiologo.mostrarAviso(this, ResurceBundle.t("label.error"), "label.noData",JOptionPane.ERROR_MESSAGE );
  }
         DefaultCategoryDataset dataset=new DefaultCategoryDataset();
+        
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
