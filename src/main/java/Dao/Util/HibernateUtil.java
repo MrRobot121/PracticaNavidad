@@ -40,7 +40,7 @@ public class HibernateUtil {
     static {
         try {
             Configuration config = new Configuration();
-
+/*
             // Propiedades directas (sin archivo properties)
             config.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
             config.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/Inventario_Hogar?useSSL=false&serverTimezone=UTC");

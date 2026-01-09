@@ -129,5 +129,12 @@
             <artifactId>jakarta.persistence</artifactId>
             <version>2.2.3</version>
         </dependency>
+        <!-- JFree char -->
+        <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.6</version>
+        </dependency>
     </dependencies>
 </project>
