@@ -36,7 +36,7 @@ public class Principal extends javax.swing.JFrame {
      * Usuario autenticado que usa la aplicación.
      */
     private final Usuarios user;
-
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Principal.class.getName());
 
     /**
@@ -83,6 +83,7 @@ public class Principal extends javax.swing.JFrame {
         VerProductosPorCategoria = new BotonBonito("");
         VerProductoSelecionado1 = new BotonBonito("");
         VerListaCompra = new BotonBonito("");
+        VerTablas = new BotonBonito("");
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         ExitOption = new javax.swing.JMenuItem();
@@ -171,6 +172,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        VerTablas.setText("jButton1");
+        VerTablas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerTablasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,7 +191,8 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(CaducidadProsima, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Buscar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(VerProductosPorCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(VerListaCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(VerListaCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(VerTablas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(117, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -206,7 +215,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(VerProductosPorCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(VerListaCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(VerTablas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(93, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                     .addContainerGap(487, Short.MAX_VALUE)
@@ -337,7 +348,7 @@ public class Principal extends javax.swing.JFrame {
             // Buscar TODOS los productos del usuario actual
 
             List<Producto> productos = DaoProducto.buscarPorUsuario(1);
-
+            
             irSegunda(productos, false);
         } else {
             // Buscar productos cuyo nombre empiece por 'texto' para ese usuario
@@ -345,24 +356,24 @@ public class Principal extends javax.swing.JFrame {
             System.out.println("\n\n\n" + productos.size());
             //  actualizarTabla(productos);
             irSegunda(productos, false);
-
+            
         }
         return false;
     }
-   /**
+
+    /**
      * Va a la ventana de creación de nuevo producto.
      *
      * @param evt Evento de acción del botón "Nuevo producto".
      */
     private void NuevoProductoBottonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoProductoBottonActionPerformed
         Controlador.goNuevoProducto(this, user, ResurceBundle.getIdiomaActual());
-
+        
 
     }//GEN-LAST:event_NuevoProductoBottonActionPerformed
 
-/**
-     * Abre la ficha del producto seleccionado en la tabla de caducidad.
-     * Valida que haya datos y una fila seleccionada.
+    /**
+     * Abre la ficha del producto seleccionado en la tabla de caducidad. Valida que haya datos y una fila seleccionada.
      *
      * @param evt Evento de acción del botón "Ver producto seleccionado".
      */
@@ -372,39 +383,38 @@ public class Principal extends javax.swing.JFrame {
             CuadroDiologo.mostrarAviso(this, "No se puede mostrar", "La tabla esta vacia", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-
+        
         int fila = jTable1.getSelectedRow();
-
+        
         if (fila == -1) {
             CuadroDiologo.mostrarAviso(this, "Ningún producto seleccionado", "Selecciona una fila primero", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-
+        
         int filaModelo = jTable1.convertRowIndexToModel(fila);
 
         // Obtener el Producto correspondiente de la lista
         Producto seleccionado = listCaducidad.get(filaModelo);
         if (seleccionado != null) {
             System.out.println(seleccionado.getNombre());
-
+            
         }
         this.dispose();
         ProductoFicha pr = new ProductoFicha(seleccionado, user, ResurceBundle.getIdiomaActual());
         pr.setVisible(true);
         pr.setLocationRelativeTo(null);
-
+        
 
     }//GEN-LAST:event_VerProductoSelecionado1ActionPerformed
-/**
-     * Permite seleccionar una categoría y ver todos los productos del usuario
-     * pertenecientes a esa categoría en una nueva ventana.
+    /**
+     * Permite seleccionar una categoría y ver todos los productos del usuario pertenecientes a esa categoría en una nueva ventana.
      *
      * @param evt Evento de acción del botón "Ver productos por categoría".
      */
     private void VerProductosPorCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerProductosPorCategoriaActionPerformed
         // TODO add your handling code here:
         List<Categoria> categorias = DaoCategoria.buscarCategoriasDeUsuario(user.getId());
-
+        
         if (categorias == null || categorias.isEmpty()) {
             CuadroDiologo.mostrarAviso(
                     this,
@@ -419,7 +429,7 @@ public class Principal extends javax.swing.JFrame {
         String[] nombresCat = categorias.stream()
                 .map(Categoria::getNombre)
                 .toArray(String[]::new);
-
+        
         String seleccion = (String) JOptionPane.showInputDialog(
                 this,
                 ResurceBundle.t("dialog.chooseCategory.message"),
@@ -440,7 +450,7 @@ public class Principal extends javax.swing.JFrame {
                 .filter(c -> c.getNombre().equals(seleccion))
                 .findFirst()
                 .orElse(null);
-
+        
         if (categoriaElegida == null) {
             return;
         }
@@ -450,12 +460,12 @@ public class Principal extends javax.swing.JFrame {
         List<Producto> productos = DaoProducto.buscarPorCategoriaYUsuario(
                 categoriaElegida.getId(), user.getId()
         );
-
+        
         irSegunda(productos, true);
-
+        
 
     }//GEN-LAST:event_VerProductosPorCategoriaActionPerformed
-/**
+    /**
      * Abre la ventana de Lista de compra.
      *
      * @param evt Evento de acción del botón "Ver lista de compra".
@@ -468,9 +478,8 @@ public class Principal extends javax.swing.JFrame {
         listaCompra.setLocationRelativeTo(null);
 
     }//GEN-LAST:event_VerListaCompraActionPerformed
-/**
-     * Opción de menú "Buscar".
-     * Reutiliza la lógica de {@link #buscar()}.
+    /**
+     * Opción de menú "Buscar". Reutiliza la lógica de {@link #buscar()}.
      *
      * @param evt Evento del elemento de menú.
      */
@@ -479,8 +488,7 @@ public class Principal extends javax.swing.JFrame {
         buscar();
     }//GEN-LAST:event_jMenuItem1BuscarActionPerformed
     /**
-     * Opción de menú "Nuevo producto".
-     * Reutiliza la lógica del botón de nuevo producto.
+     * Opción de menú "Nuevo producto". Reutiliza la lógica del botón de nuevo producto.
      *
      * @param evt Evento del elemento de menú.
      */
@@ -521,6 +529,17 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_InglesActionPerformed
 
+    private void VerTablasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerTablasActionPerformed
+        // TODO add your handling code here:
+        //ABRIR TABLA 
+         MostrarGraficoProducto grafico = new MostrarGraficoProducto(
+            this,                                    // Ventana padre
+            ResurceBundle.getIdiomaActual(),        // Idioma
+            user                                     // Usuario actual
+    );
+    grafico.setVisible(true);
+    }//GEN-LAST:event_VerTablasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -560,6 +579,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton VerListaCompra;
     private javax.swing.JButton VerProductoSelecionado1;
     private javax.swing.JButton VerProductosPorCategoria;
+    private javax.swing.JButton VerTablas;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1Buscar;
@@ -592,12 +612,13 @@ public class Principal extends javax.swing.JFrame {
         CambioIdioma.setText(ResurceBundle.t("menu.language"));     // "Idioma"
         Español.setText(ResurceBundle.t("language.spanish"));  // "Español"
         Ingles.setText(ResurceBundle.t("language.english"));   // "English"
-
+        //TRABLES
+        VerTablas.setText(ResurceBundle.t("label.tables"));
+        
     }
 
     /**
-     * Abre la ventana de resultados (CategoriaProducto) con la lista de productos
-     * proporcionada, cerrando la ventana principal.
+     * Abre la ventana de resultados (CategoriaProducto) con la lista de productos proporcionada, cerrando la ventana principal.
      *
      * @param productos Lista de productos a mostrar.
      * @param categoria true si se trata de una vista por categoría, false si es búsqueda.
@@ -609,33 +630,32 @@ public class Principal extends javax.swing.JFrame {
         }
         this.dispose();  // CIERRA ACTUAL
         System.out.println("irSegunda productos size = " + productos.size());
-
+        
         CategoriaProducto cat = new CategoriaProducto(user, productos, categoria, ResurceBundle.getIdiomaActual());//SIEMPRE TENGO QUE MANTENER EL USER ACTUAL
         cat.setVisible(true);
         cat.setLocationRelativeTo(null);  // Centra en pantalla
     }
-  /**
-     * Rellena la tabla de la parte inferior con los 10 productos
-     * más cercanos a caducar para el usuario actual.
-     * Si no hay resultados, no modifica la tabla.
+
+    /**
+     * Rellena la tabla de la parte inferior con los 10 productos más cercanos a caducar para el usuario actual. Si no hay resultados, no modifica la tabla.
      */
     private void actualizarTablaCaducidad() {
         listCaducidad = DaoProducto.buscarTop10PorCaducidad(user.getId());
         if (listCaducidad == null || listCaducidad.isEmpty()) {
             return;
         }
-
+        
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setRowCount(0);
-
+        
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
+        
         for (Producto p : listCaducidad) {
             String fechaTxt = "";
             if (p.getFechaCaducidad() != null) {
                 fechaTxt = sdf.format(p.getFechaCaducidad());
             }
-
+            
             modelo.addRow(new Object[]{
                 p.getNombre(),
                 p.getIdCategoria().getNombre(),//me flipa que se pueda hacer esto
@@ -643,8 +663,8 @@ public class Principal extends javax.swing.JFrame {
                 p.getCantidadMinDeseada(),
                 fechaTxt
             });
-
+            
         }
     }
-
+    
 }
